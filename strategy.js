@@ -12,13 +12,13 @@ const getStrategy = (indicator, wallet) => {
     if (indicator > 75) {
         const invest = calculateInvestmentValue(wallet, 100);
         return { action: invest > 0 ? 'SELL' : 'WAIT', amount: invest, level: 1 };
-    } else if (indicator > 70 && stablePerc < 85) {
+    } else if (indicator > 70 && stablePerc > 50) {
         const invest = calculateInvestmentValue(wallet, 50);
         return { action: invest > 0 ? 'SELL' : 'WAIT', amount: invest, level: 2 };
-    } else if (indicator > 65 && indicator < 70 && stablePerc < 50) {
+    } else if (indicator > 65 && indicator < 70 && stablePerc > 70) {
         const invest = calculateInvestmentValue(wallet, 10);
         return { action: invest > 0 ? 'SELL' : 'WAIT', amount: invest, level: 3 };
-    } else if (indicator > 60 && indicator < 65 && stablePerc < 20) {
+    } else if (indicator > 60 && indicator < 65 && stablePerc > 85) {
         const invest = calculateInvestmentValue(wallet, 5);
         return { action: invest > 0 ? 'SELL' : 'WAIT', amount: invest, level: 4 };
     } else if (indicator > 35 && indicator < 40 && stablePerc > 85) {
