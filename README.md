@@ -75,7 +75,7 @@ Please notice there is used 'MARKET' ORDER which might be considered as risky.
 - [NodeJS](https://nodejs.org/en/)
 - [Yarn](https://classic.yarnpkg.com/en/docs/install/)
 
-1. SET API KEY in .env for (setup once)
+1. Rename .env-sample to .env and SET API KEYs (setup once)
 - [TAAPI](https://taapi.io/) Free api key 
 - [BINANCE](https://www.binance.com/en) -> Profile -> API management. Ensure binance key have rights to set trade (Enable Spot & Margin Trading, Enable Reading)
 - CRYPTO - crypto what you want to trade
