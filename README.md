@@ -71,21 +71,21 @@ Using Binance API to open trades.
 Please notice there is used 'MARKET' ORDER which might be considered as risky. 
 
 ## Usage
-0. Install (setup once) 
-- [NodeJS](https://nodejs.org/en/)
-- [Yarn](https://classic.yarnpkg.com/en/docs/install/)
+1. Install (setup once) 
+    * [NodeJS](https://nodejs.org/en/)
+    * [Yarn](https://classic.yarnpkg.com/en/docs/install/)
 
-1. Rename .env-sample to .env and SET API KEYs (setup once)
-- [TAAPI](https://taapi.io/) Free api key 
-- [BINANCE](https://www.binance.com/en) -> Profile -> API management. Ensure binance key have rights to set trade (Enable Spot & Margin Trading, Enable Reading)
-- CRYPTO - crypto what you want to trade
-- STABLE - stable coin you want to use. Notice the binance must suppot trade crypto with selected stable coin
-- INDICATOR - trending strategy, see taapi for available indicators
-- INTERVAL - interval applied to indicator
+2. Rename .env-sample to .env and SET API KEYs (setup once)
+    * [TAAPI](https://taapi.io/) Free api key 
+    * [BINANCE](https://www.binance.com/en) -> Profile -> API management. Ensure binance key have rights to set trade (Enable Spot & Margin Trading, Enable Reading)
+    * CRYPTO - crypto what you want to trade
+    * STABLE - stable coin you want to use. Notice the binance must suppot trade crypto with selected stable coin
+    * INDICATOR - trending strategy, see taapi for available indicators
+    * INTERVAL - interval applied to indicator
 
-2. Ensure you have (setup once)
-- CRYPTO or STABLE coin in wallet
-- fraction of BNB coin for cheaper transaction fees
+3. Ensure you have (setup once)
+    * CRYPTO or STABLE coin in wallet
+    * fraction of BNB coin for cheaper transaction fees
 
 ```
 TAAPI_API_KEY=[your taapi api key]
@@ -96,14 +96,14 @@ STABLE=BUSD
 INDICATOR=rsi
 INTERVAL=30m
 ```
-3. Install (setup once)
+4. Install (setup once)
 Run in project folder.
 
 ```bash
 yarn install
 ```
 
-4. Start the trade bot (each time you wisth to start bot)
+5. Start the trade bot (each time you wisth to start bot)
 Run in project folder.
 
 ```bash
