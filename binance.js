@@ -23,7 +23,7 @@ const trade = async (strategy, tradeSymbol) => {
         try {
             await axios({ method: 'post', url: url, headers: { 'X-MBX-APIKEY': API_KEY } });
         } catch (err) {
-            console.log(err);
+            console.log(err.response.data.msg);
         }
 
     }
@@ -46,6 +46,8 @@ const getWallet = async (cryptoCoin, stableCoin) => {
             symbol: cryptoCoin,
             value: 0,
             estimateStable: 0,
+            askPrice: 0,
+            bidPrice: 0,
         },
         stable: {
             symbol: stableCoin,
@@ -65,11 +67,13 @@ const getWallet = async (cryptoCoin, stableCoin) => {
         for (coin of response.data.balances) {
             if (coin.asset === cryptoCoin) {
                 result.crypto.value = Number(coin.free);
-                result.crypto.estimateStable = Number(coin.free) * Number(price.bidPrice);
+                result.crypto.askPrice = Number(Number(price.askPrice).toFixed(2));
+                result.crypto.bidPrice = Number(Number(price.bidPrice).toFixed(2));
+                result.crypto.estimateStable = Number((Number(coin.free) * Number(price.bidPrice)).toFixed(2));
             }
             if (coin.asset === stableCoin) {
-                result.stable.value = Number(coin.free);
-                result.stable.estimateCrypto = Number(coin.free) / Number(price.askPrice);
+                result.stable.value = Number(Number(coin.free).toFixed(2));
+                result.stable.estimateCrypto = Number((Number(coin.free) / Number(price.askPrice)).toFixed(2));
             }
             if (coin.asset === 'BNB') {
                 result.fee.value = Number(coin.free);
@@ -78,7 +82,7 @@ const getWallet = async (cryptoCoin, stableCoin) => {
         result.total.estimate = result.stable.value + result.crypto.estimateStable;
         return result;
     } catch (err) {
-        console.log(err);
+        console.log(err.response.data.msg);
     }
 }
 
@@ -94,7 +98,7 @@ const currentPrice = async (cryptoCoin, stableCoin) => {
             bidPrice: response.data.bidPrice
         };
     } catch (err) {
-        console.log(err);
+        console.log(err.response.data.msg);
     }
 
 }

@@ -30,7 +30,9 @@ Calls Binance to check wallet to optimize strategy.
     "crypto": {
         "symbol": "DOT",
         "value": 1.01,
-        "estimateStable": 37.0001
+        "estimateStable": 37.0001,
+        "askPrice": 37.73,
+        "bidPrice": 37.71,
     },
     "stable": {
         "symbol": "BUSD",
