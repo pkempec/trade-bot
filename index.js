@@ -19,7 +19,8 @@ cron.schedule('* * * * *', async () => {
     console.log('-----------------------------------------');
     console.log('TIME:              ' + moment().format('YYYY.MM.DD HH:mm:ss'));
     const indicator = await analyze(INDICATOR_TYPE, TAAPI_CRYPTO, INTERVAL);
-    console.log('Current Indicator: ' + indicator);
+    console.log('Current Type:      ' + INDICATOR_TYPE + '/' + INTERVAL);
+    console.log('Current Indicator: ' + (indicator !== undefined ? indicator.toFixed(2) : indicator));
 
     const wallet = await getWallet(CRYPTO, STABLE);
     console.log('Wallet:            ' + JSON.stringify(wallet));
