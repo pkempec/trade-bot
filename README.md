@@ -111,3 +111,9 @@ Run in project folder.
 ```bash
 yarn start
 ```
+
+or to log in trade.log file
+
+```bash
+yarn start-log
+```
