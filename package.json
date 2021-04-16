@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node index.js",
-    "start-log": "yarn start > trade.log 2>&1"
+    "start-log": "yarn start >> trade.log 2>&1"
   },
   "dependencies": {
     "axios": "^0.21.1",

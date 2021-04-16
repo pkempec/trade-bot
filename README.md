@@ -117,3 +117,26 @@ or to log in trade.log file
 ```bash
 yarn start-log
 ```
+
+## FAQ
+Q1. I am getting "Timestamp for this request was 1000ms ahead of the server's time.".
+
+A: Ensure your time is in sync. Try to synchronize your time manually.
+1. Right click on windows clocks
+2. Select "Adjust date/time"
+3. Ensure you have enabled both "Set time automatically" and "Set time zone automatically"
+3. Press "Sync now"
+4. Check if error disapear
+
+It it helps I recommend update windows registry to sync time more often.
+
+This will set to sync time each 17min (1020 seconds)
+1. Open Regedit
+2. Navigate to HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\W32Time\TimeProviders\NtpClient
+3. Adjust value SpecialPollInterval to 1020 as Decimal Value
+
+Q2. I do not recieve value of indicator.
+
+A: 
+- Please ensure you have correct TAAPI key in .env file
+- I have notices from time to time TAAPI have issues and do not sent correct response. This is usually fixed by TAAPI and it start to work normally in few minutes.
