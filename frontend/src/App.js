@@ -127,8 +127,8 @@ const App = () => {
         datasets: [
           {
             label: 'USD',
-            data: json.map(log => log.wallet.total.estimate),
-            action: json.map(log => log.strategy.action),
+            data: json.map(log => log.wallet?.total?.estimate),
+            action: json.map(log => log.strategy?.action),
             symbol: true,
             borderColor: colors[0],
             backgroundColor: colors[0],
@@ -137,23 +137,23 @@ const App = () => {
           },
           {
             label: 'RSI',
-            data: json.map(log => log.indicator.value),
-            action: json.map(log => log.strategy.action),
+            data: json.map(log => log.indicator?.value),
+            action: json.map(log => log.strategy?.action),
             borderColor: colors[1],
             backgroundColor: colors[1],
             yAxisID: 'y1',
           },
           {
             label: 'Price',
-            data: json.map(log => log.wallet.crypto.askPrice),
-            action: json.map(log => log.strategy.action),
+            data: json.map(log => log.wallet?.crypto?.askPrice),
+            action: json.map(log => log.strategy?.action),
             borderColor: colors[2],
             backgroundColor: colors[2],
             yAxisID: 'y1',
           },
           {
             label: 'Crypto',
-            data: json.map(log => log.wallet.crypto.estimateStable),
+            data: json.map(log => log.wallet?.crypto?.estimateStable),
             borderColor: colors[3],
             backgroundColor: colors[3],
             fill: true,
@@ -161,7 +161,7 @@ const App = () => {
           },
           {
             label: 'Stable',
-            data: json.map(log => log.wallet.stable.value),
+            data: json.map(log => log.wallet?.stable?.value),
             borderColor: colors[4],
             backgroundColor: colors[4],
             fill: true,
