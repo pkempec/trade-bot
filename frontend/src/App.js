@@ -9,6 +9,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  Filler,
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Line } from 'react-chartjs-2';
@@ -23,7 +24,8 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  ChartDataLabels
+  ChartDataLabels,
+  Filler,
 );
 
 const App = () => {
@@ -42,21 +44,34 @@ const App = () => {
   const [data, setData] = useState(empty);
 
   const options = {
-    // datasetFill: true,
+    scales: {
+      y: [
+      {
+        id: "ratio-stack",
+        stacked: true,
+        display: false,
+      },
+      {
+        id: "normal",
+        stacked: false,
+      }]
+    },
     interaction: {
       intersect: false,
       mode: 'index',
     },
     responsive: true,
     plugins: {
-      legend: {
-        position: 'top',
-      },
       title: {
         display: true,
         text: 'Trade History',
       },
       datalabels: {
+        align : 'top',
+        display: function(context) {
+          const action = context.dataset?.action?.[context.dataIndex];
+          return action === 'SELL' || action === 'BUY'
+        },
         color: function(context) {
           let color = 'black';
           switch(context.dataset?.action?.[context.dataIndex]) {
@@ -73,15 +88,17 @@ const App = () => {
         },
         formatter: function(value, context) {
           let actionSymbol = '';
-          switch(context.dataset?.action?.[context.dataIndex]) {
-            case 'SELL':
-              actionSymbol = '▲';
-              break;
-            case 'BUY':
-              actionSymbol = '▼';
-              break;
-            default:
-              break;
+          if(context.dataset?.symbol){
+            switch(context.dataset?.action?.[context.dataIndex]) {
+              case 'SELL':
+                actionSymbol = '▲';
+                break;
+              case 'BUY':
+                actionSymbol = '▼';
+                break;
+              default:
+                break;
+            }
           }
           return actionSymbol !== '' ? actionSymbol + ' ' + value :  value;
         },
@@ -95,10 +112,10 @@ const App = () => {
       '#FF3784',
       '#36A2EB',
       '#4BC0C0',
-      '#F77825',
+      'rgba(247,120,37, 0.2)',
+      'rgba(55, 159, 122, 0.5)',
       '#9966FF',
       '#00A8C6',
-      '#379F7A',
       '#CC2738',
       '#8B628A',
       '#8FBE00',
@@ -114,22 +131,46 @@ const App = () => {
             label: 'USD',
             data: json.map(log => log.wallet.total.estimate),
             action: json.map(log => log.strategy.action),
+            symbol: true,
             borderColor: colors[0],
             backgroundColor: colors[0],
+            yAxisID: 'normal',
             // tension: 0.4,
           },
           {
             label: 'RSI',
             data: json.map(log => log.indicator.value),
+            action: json.map(log => log.strategy.action),
             borderColor: colors[1],
             backgroundColor: colors[1],
+            yAxisID: 'normal',
           },
           {
             label: 'Price',
             data: json.map(log => log.wallet.crypto.askPrice),
+            action: json.map(log => log.strategy.action),
             borderColor: colors[2],
             backgroundColor: colors[2],
-          }
+            yAxisID: 'normal',
+          },
+          {
+            label: 'Crypto',
+            data: json.map(log => log.wallet.crypto.estimateStable),
+            borderColor: colors[3],
+            backgroundColor: colors[3],
+            fill: true,
+            stack: 'ratio',
+            yAxisID: 'ratio-stack',
+          },
+          {
+            label: 'Stable',
+            data: json.map(log => log.wallet.stable.value),
+            borderColor: colors[4],
+            backgroundColor: colors[4],
+            fill: true,
+            stack: 'ratio',
+            yAxisID: 'ratio-stack',
+          },
         ],
       };    
 
