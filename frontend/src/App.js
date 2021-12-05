@@ -45,16 +45,14 @@ const App = () => {
 
   const options = {
     scales: {
-      y: [
-      {
-        id: "ratio-stack",
-        stacked: true,
-        display: false,
-      },
-      {
-        id: "normal",
+      y: {
         stacked: false,
-      }]
+        position: 'right',
+        // display: false,
+      },
+      y1: {
+        stacked: false,
+      }
     },
     interaction: {
       intersect: false,
@@ -134,7 +132,7 @@ const App = () => {
             symbol: true,
             borderColor: colors[0],
             backgroundColor: colors[0],
-            yAxisID: 'normal',
+            yAxisID: 'y1',
             // tension: 0.4,
           },
           {
@@ -143,7 +141,7 @@ const App = () => {
             action: json.map(log => log.strategy.action),
             borderColor: colors[1],
             backgroundColor: colors[1],
-            yAxisID: 'normal',
+            yAxisID: 'y1',
           },
           {
             label: 'Price',
@@ -151,7 +149,7 @@ const App = () => {
             action: json.map(log => log.strategy.action),
             borderColor: colors[2],
             backgroundColor: colors[2],
-            yAxisID: 'normal',
+            yAxisID: 'y1',
           },
           {
             label: 'Crypto',
@@ -159,8 +157,7 @@ const App = () => {
             borderColor: colors[3],
             backgroundColor: colors[3],
             fill: true,
-            stack: 'ratio',
-            yAxisID: 'ratio-stack',
+            yAxisID: 'y',
           },
           {
             label: 'Stable',
@@ -168,8 +165,7 @@ const App = () => {
             borderColor: colors[4],
             backgroundColor: colors[4],
             fill: true,
-            stack: 'ratio',
-            yAxisID: 'ratio-stack',
+            yAxisID: 'y',
           },
         ],
       };    
