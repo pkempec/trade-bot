@@ -108,14 +108,14 @@ yarn install
 5. Start the trade bot (each time you wisth to start bot)
 Run in project folder.
 
+Start trading
 ```bash
-yarn start
+yarn start-backend
 ```
 
-or to log in trade.log file
-
+Start UI to see data generated from backend
 ```bash
-yarn start-log
+yarn start-frontend
 ```
 
 ## FAQ
