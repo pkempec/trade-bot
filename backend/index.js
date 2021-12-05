@@ -3,6 +3,7 @@ var moment = require('moment');
 const { analyze } = require('./analyzer');
 const { getStrategy } = require('./strategy');
 const { trade, getWallet } = require('./binance');
+const { logger } = require('./logger');
 
 var cron = require('node-cron');
 
@@ -15,20 +16,17 @@ const TAAPI_CRYPTO = CRYPTO + '/' + STABLE;
 const BINANCE_CRYPTO_SYMBOL = CRYPTO + STABLE;
 
 cron.schedule('* * * * *', async () => {
+    const time = moment().format('YYYY.MM.DD HH:mm:ss');
 
-    console.log('-----------------------------------------');
-    console.log('TIME:              ' + moment().format('YYYY.MM.DD HH:mm:ss'));
-    const indicator = await analyze(INDICATOR_TYPE, TAAPI_CRYPTO, INTERVAL);
-    console.log('Current Type:      ' + INDICATOR_TYPE + '/' + INTERVAL);
-    console.log('Current Indicator: ' + (indicator !== undefined ? indicator.toFixed(2) : indicator));
-
+    const indicatorValue = await analyze(INDICATOR_TYPE, TAAPI_CRYPTO, INTERVAL);
     const wallet = await getWallet(CRYPTO, STABLE);
-    console.log('Wallet:            ' + JSON.stringify(wallet));
-
-    const strategy = getStrategy(indicator, wallet);
-    console.log('Strategy:          ' + JSON.stringify(strategy));
-
+    const strategy = getStrategy(indicatorValue, wallet);
     trade(strategy, BINANCE_CRYPTO_SYMBOL);
-    console.log('-----------------------------------------');
 
+    const indicator = {
+        type: INDICATOR_TYPE + '/' + INTERVAL,
+        value: (indicatorValue !== undefined ? indicatorValue.toFixed(2) : indicatorValue)
+    }
+
+    logger.info('Stats', {time, indicator, wallet, strategy});
 });

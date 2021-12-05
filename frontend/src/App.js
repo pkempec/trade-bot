@@ -139,7 +139,7 @@ const App = () => {
     fetch(raw)
     .then(r => r.text())
     .then(text => {
-      let json = JSON.parse('[' + text.replace(/,$/,'') + ']');
+      let json = JSON.parse('[' + text.trim().replace(/,$/,'') + ']');
       parseJsonData(json);
     });
   }, []);
