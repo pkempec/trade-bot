@@ -28,7 +28,7 @@ cron.schedule('* * * * *', async () => {
     const strategy = getStrategy(indicator, wallet);
     console.log('Strategy:          ' + JSON.stringify(strategy));
 
-    trade(strategy, BINANCE_CRYPTO_SYMBOL);
+    // trade(strategy, BINANCE_CRYPTO_SYMBOL);
     console.log('-----------------------------------------');
 
 });
