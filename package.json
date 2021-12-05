@@ -3,15 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "repository": "https://github.com/pkempec/trade-bot.git",
   "scripts": {
-    "start": "node index.js",
-    "start-log": "yarn start >> trade.log 2>&1"
-  },
-  "dependencies": {
-    "axios": "^0.21.1",
-    "dotenv": "^8.2.0",
-    "momentjs": "^2.0.0",
-    "node-cron": "^2.0.3",
-    "taapi": "^1.2.8"
+    "install": "yarn --cwd backend install && yarn --cwd frontend install",
+    "start-backend": "yarn --cwd backend start",
+    "start-frontend": "yarn --cwd frontend start"
   }
 }
