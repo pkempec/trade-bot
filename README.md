@@ -118,6 +118,14 @@ Start UI to see data generated from backend
 yarn start-frontend
 ```
 
+#### Logs
+Logs from backend are collected in different places
+
+1. Trade logs are collected in frontend/src/data/trade-YYYY-MM-DD.log
+2. Warning logs are collected in backend/warning.log
+3. Error logs are collected in backend/error.log
+
+
 ## FAQ
 Q1. I am getting "Timestamp for this request was 1000ms ahead of the server's time.".
 
