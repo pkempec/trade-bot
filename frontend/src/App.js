@@ -46,6 +46,7 @@ const App = () => {
   const options = {
     scales: {
       y: {
+        text: 'stacked',
         stacked: false,
         position: 'right',
         // display: false,
@@ -58,6 +59,11 @@ const App = () => {
       intersect: false,
       mode: 'index',
     },
+    elements: {
+      point: {
+          radius: 0
+      }
+    },
     responsive: true,
     plugins: {
       title: {
@@ -67,8 +73,9 @@ const App = () => {
       datalabels: {
         align : 'top',
         display: function(context) {
+          const isCurrent = context.dataIndex === context.dataset?.action?.length - 1
           const action = context.dataset?.action?.[context.dataIndex];
-          return action === 'SELL' || action === 'BUY'
+          return isCurrent || action === 'SELL' || action === 'BUY'
         },
         color: function(context) {
           let color = 'black';
