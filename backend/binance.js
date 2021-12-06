@@ -1,5 +1,6 @@
 const crypto = require('crypto');
 const axios = require('axios');
+const { logger } = require('./logger');
 
 const BASE_URL = 'https://api.binance.com';
 const ENDPOINT_ORDER = '/api/v3/order';
@@ -22,8 +23,8 @@ const trade = async (strategy, tradeSymbol) => {
         const url = BASE_URL + ENDPOINT_ORDER + '?' + query + '&signature=' + signature;
         try {
             await axios({ method: 'post', url: url, headers: { 'X-MBX-APIKEY': API_KEY } });
-        } catch (err) {
-            console.log(err.response.data.msg);
+        } catch (error) {
+            logger.error('Binance', { error, reason: error.response.data.msg});
         }
 
     }
@@ -81,8 +82,8 @@ const getWallet = async (cryptoCoin, stableCoin) => {
         }
         result.total.estimate = result.stable.value + result.crypto.estimateStable;
         return result;
-    } catch (err) {
-        console.log(err.response.data.msg);
+    } catch (error) {
+        logger.error('Binance', { error, reason: error.response.data.msg});
     }
 }
 
@@ -97,8 +98,8 @@ const currentPrice = async (cryptoCoin, stableCoin) => {
             askPrice: response.data.askPrice,
             bidPrice: response.data.bidPrice
         };
-    } catch (err) {
-        console.log(err.response.data.msg);
+    } catch (error) {
+        logger.error('Binance', { error, reason: error.response.data.msg});
     }
 
 }

@@ -19,7 +19,8 @@ const logger = winston.createLogger({
     // - Write all logs with level `info` and below to `combined.log`
     //
     new winston.transports.File({ filename: 'error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'trade.log', dirname: '../frontend/src/' }),
+    new winston.transports.File({ filename: 'warning.log', level: 'warn' }),
+    new winston.transports.File({ filename: 'trade.log', levle: 'info', dirname: '../frontend/src/' }),
   ],
 });
 

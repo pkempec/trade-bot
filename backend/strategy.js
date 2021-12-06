@@ -1,18 +1,17 @@
+const { logger } = require('./logger');
+
 const getStrategy = (indicator, wallet) => {
     if (wallet === undefined) {
-        console.log('Missing wallet');
+        logger.warn('Strategy', { reason: 'Missing wallet'});
         return { action: 'WAIT', amount: 0, level: 0 };
     }
     if (wallet.fee.value <= 0) {
-        console.log('I am not trading without BNB for cheaper fees.');
+        logger.warn('Strategy', { reason: 'I am not trading without BNB for cheaper fees.'});
         return { action: 'WAIT', amount: 0, level: 0 };
     }
 
     const stablePerc = (wallet.stable.estimateCrypto / (wallet.stable.estimateCrypto + wallet.crypto.value)) * 100;
     const cryptoPerc = (100 - stablePerc);
-
-    console.log('Current RATE:      ' + cryptoPerc.toFixed(2) + ':' + stablePerc.toFixed(2));
-
     if (indicator > 75) {
         const invest = calculateInvestmentValue(wallet, 98, 'SELL');
         return { action: invest > 0 ? 'SELL' : 'WAIT', amount: invest, level: 1 };
@@ -38,7 +37,7 @@ const calculateInvestmentValue = (wallet, perc, action) => {
     const invest = (value / 100) * perc;
     if (invest < 11) {
         //usually there is limit and with such a fraction is not allowed to be traded
-        console.log("Low Limit:         " + invest);
+        logger.warn('Strategy', { reason: 'Low Limit: '+ invest});
         return 0;
     }
     return Number(invest.toFixed(2));
