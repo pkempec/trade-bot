@@ -2,7 +2,9 @@
 Web app that displays statistics generaged by trade-bot.
 
 ## TODO 
- - allow selection of logs to be parsed based on folder content
+- Render week - select some logs from each day instead of all
+- Render moth - select some logs from each day instaed of all
+! note all buy/sell must presents
 
 ## start
 ```

@@ -13,7 +13,7 @@ import {
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Line } from 'react-chartjs-2';
-import raw from './trade.log';
+import { MenuItem, Select } from '@material-ui/core';
 
 ChartJS.register(
   ArcElement,
@@ -42,6 +42,9 @@ const App = () => {
   }
 
   const [data, setData] = useState(empty);
+  const [dataSelect, setDataSelect] = React.useState('');
+  const [dataMap, setDataMap] = React.useState(new Map());
+
 
   const options = {
     scales: {
@@ -113,6 +116,17 @@ const App = () => {
 
   useEffect(() => {
 
+    const importAll = (r) => {
+      return r.keys().map(r);
+    }
+    const imports = importAll(require.context('./data', false, /\.(log)$/));
+    const data = new Map(imports.map( value => [value.default.slice(20,30), value]))
+    setDataMap(data);
+    setDataSelect(Array.from(data.keys()).pop());
+  }, []);
+
+  useEffect(() => {
+
     const colors = [
       '#FF3784',
       '#36A2EB',
@@ -180,17 +194,35 @@ const App = () => {
       setData(data);
     };
 
-    fetch(raw)
-    .then(r => r.text())
-    .then(text => {
-      let json = JSON.parse('[' + text.trim().replace(/,$/,'') + ']');
-      parseJsonData(json);
-    });
-  }, []);
+    if (dataMap && dataMap.get(dataSelect) && dataMap.get(dataSelect).default) {
+      fetch(dataMap.get(dataSelect).default)
+      .then(r => r.text())
+      .then(text => {
+        let json = JSON.parse('[' + text.trim().replace(/,$/,'') + ']');
+        parseJsonData(json);
+      });
+    }
+  }, [dataSelect, dataMap]);
 
+
+  const handleSelection = (event) => {
+    setDataSelect(event.target.value);
+  };
 
   return ( 
     <div>
+      <Select
+          labelId="date-label"
+          id="date-id"
+          value={dataSelect}
+          onChange={handleSelection}
+      >
+         {
+          [...dataMap.keys()].map(key =>
+            <MenuItem value={key} key={key}>{key}</MenuItem>
+          )
+        }
+      </Select>
       <Line options={options} data={data} />
     </div>
     );
