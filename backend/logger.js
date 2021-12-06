@@ -21,7 +21,7 @@ const logger = winston.createLogger({
     //
     new winston.transports.File({ filename: 'error.log', level: 'error' }),
     new winston.transports.File({ filename: 'warning.log', level: 'warn' }),
-    new winston.transports.DailyRotateFile({ filename: 'trade-%DATE%.log', levle: 'info', dirname: '../frontend/src/', datePattern:'YYYY-MM-DD' }),
+    new winston.transports.DailyRotateFile({ filename: 'trade-%DATE%.log', levle: 'info', dirname: '../frontend/src/data/', datePattern:'YYYY-MM-DD' }),
   ],
 });
 

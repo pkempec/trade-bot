@@ -15,20 +15,18 @@ const INTERVAL = process.env.INTERVAL;
 const TAAPI_CRYPTO = CRYPTO + '/' + STABLE;
 const BINANCE_CRYPTO_SYMBOL = CRYPTO + STABLE;
 
-logger.info('Stats');
+cron.schedule('* * * * *', async () => {
+    const time = moment().format('YYYY.MM.DD HH:mm:ss');
 
-// cron.schedule('* * * * *', async () => {
-//     const time = moment().format('YYYY.MM.DD HH:mm:ss');
+    const indicatorValue = await analyze(INDICATOR_TYPE, TAAPI_CRYPTO, INTERVAL);
+    const wallet = await getWallet(CRYPTO, STABLE);
+    const strategy = getStrategy(indicatorValue, wallet);
+    trade(strategy, BINANCE_CRYPTO_SYMBOL);
 
-//     const indicatorValue = await analyze(INDICATOR_TYPE, TAAPI_CRYPTO, INTERVAL);
-//     const wallet = await getWallet(CRYPTO, STABLE);
-//     const strategy = getStrategy(indicatorValue, wallet);
-//     trade(strategy, BINANCE_CRYPTO_SYMBOL);
+    const indicator = {
+        type: INDICATOR_TYPE + '/' + INTERVAL,
+        value: (indicatorValue !== undefined ? indicatorValue.toFixed(2) : indicatorValue)
+    }
 
-//     const indicator = {
-//         type: INDICATOR_TYPE + '/' + INTERVAL,
-//         value: (indicatorValue !== undefined ? indicatorValue.toFixed(2) : indicatorValue)
-//     }
-
-//     logger.info('Stats', {time, indicator, wallet, strategy});
-// });
+    logger.info('Stats', {time, indicator, wallet, strategy});
+});
