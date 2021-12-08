@@ -50,11 +50,12 @@ const App = () => {
     scales: {
       y: {
         text: 'stacked',
-        stacked: false,
+        stacked: true,
         position: 'right',
-        // display: false,
+        min: 0,
       },
       y1: {
+        min: 0,
         stacked: false,
       }
     },
@@ -190,18 +191,18 @@ const App = () => {
             yAxisID: 'y1',
           },
           {
-            label: 'Crypto',
-            data: json.map(log => log.wallet?.crypto?.estimateStable),
-            borderColor: colors[3],
-            backgroundColor: colors[3],
-            fill: true,
-            yAxisID: 'y',
-          },
-          {
             label: 'Stable',
             data: json.map(log => log.wallet?.stable?.value),
             borderColor: colors[4],
             backgroundColor: colors[4],
+            fill: true,
+            yAxisID: 'y',
+          },
+          {
+            label: 'Crypto',
+            data: json.map(log => log.wallet?.crypto?.estimateStable),
+            borderColor: colors[3],
+            backgroundColor: colors[3],
             fill: true,
             yAxisID: 'y',
           },
