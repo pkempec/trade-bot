@@ -3,6 +3,7 @@ var moment = require('moment');
 const { analyze } = require('./analyzer');
 const { getStrategy } = require('./strategy');
 const { trade, getWallet } = require('./binance');
+const { sendMessage } = require('./notification');
 const { logger } = require('./logger');
 
 var cron = require('node-cron');
@@ -29,4 +30,8 @@ cron.schedule('* * * * *', async () => {
     }
 
     logger.info('Stats', {time, indicator, wallet, strategy});
+
+    if (strategy.action != 'WAIT') {
+        sendMessage(strategy.action + ' Bid: ' + wallet.crypto.bidPrice.toFixed(2) + ' Amount: '+ strategy.amount.toFixed(2));
+    }
 });

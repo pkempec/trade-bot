@@ -4,16 +4,25 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js",
-    "start-log": "yarn start >> trade.log 2>&1"
+    "build": "babel src -d lib",
+    "start": "nodemon --exec babel-node ./src/index.js"
   },
   "dependencies": {
+    "@babel/runtime": "^7.16.3",
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "momentjs": "^2.0.0",
     "node-cron": "^2.0.3",
+    "node-telegram-bot-api": "^0.54.0",
     "taapi": "^1.2.8",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.5"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
+    "@babel/node": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
+    "nodemon": "^2.0.15"
   }
 }
