@@ -74,11 +74,12 @@ const App = () => {
         text: 'Trade History',
       },
       datalabels: {
+        rotation: -45,
         align : 'top',
         display: function(context) {
           const isCurrent = context.dataIndex === context.dataset?.action?.length - 1
           const action = context.dataset?.action?.[context.dataIndex];
-          return isCurrent || action === 'SELL' || action === 'BUY'
+          return isCurrent || action === 'SELL' || action === 'BUY' ? 'auto' : false
         },
         color: function(context) {
           let color = 'black';
@@ -108,7 +109,7 @@ const App = () => {
                 break;
             }
           }
-          return actionSymbol !== '' ? actionSymbol + ' ' + value :  value;
+          return actionSymbol !== '' ? actionSymbol + ' ' + parseFloat(value).toFixed(2) : parseFloat(value).toFixed(2);
         },
       },
     },
@@ -142,6 +143,21 @@ const App = () => {
     ];
 
     const parseJsonData = (json) => {
+      
+      const radius = (context) => {
+        let radius = 0;
+        switch(context.dataset?.action?.[context.dataIndex]) {
+          case 'SELL':
+            radius = 4;
+            break;
+            case 'BUY':
+            radius = 4;
+            break;
+          default:
+            break;
+        }
+        return radius;
+      }
 
       const data =  {
         labels : json.map(log => log.time),
@@ -154,6 +170,7 @@ const App = () => {
             borderColor: colors[0],
             backgroundColor: colors[0],
             yAxisID: 'y1',
+            pointRadius: radius,
             // tension: 0.4,
           },
           {
