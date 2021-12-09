@@ -65,7 +65,7 @@ const getWallet = async (cryptoCoin, stableCoin) => {
     };
     try {
         const response = await axios({ method: 'get', url: url, headers: { 'X-MBX-APIKEY': API_KEY } });
-        for (coin of response.data.balances) {
+        for (let coin of response.data.balances) {
             if (coin.asset === cryptoCoin) {
                 result.crypto.value = Number(coin.free);
                 result.crypto.askPrice = Number(Number(price.askPrice).toFixed(2));
