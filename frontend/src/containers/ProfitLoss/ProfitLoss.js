@@ -8,6 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import tradeLog from '../../data/trades.log';
+import moment from 'moment';
 
 const useStyles = makeStyles({
   table: {
@@ -47,26 +48,37 @@ const ProfitLoss = () => {
     .then(text => {
       const json = JSON.parse('[' + text.trim().replace(/,$/,'') + ']');
       const start = json[0];
-      const current = json[json.length-1];
-    
+      
       const startStable = getStable(start);
       const startCrypto = getCrypto(start);
+      
+      const date = moment().format('YYYY-MM-DD');
 
-      const currentStable = getStable(current);
-      const currentCrypto = getCrypto(current);
-
-      const plStable = calcProfitLoss(startStable, currentStable);
-      const plCrypto = calcProfitLoss(startCrypto, currentCrypto);
-
-      setData([{
-        name: 'Since ' + start?.time?.split(' ')[0],
-        startStable,
-        currentStable,
-        plStable,
-        startCrypto,
-        currentCrypto,
-        plCrypto
-      }])
+      try {
+        const currentLog = require('../../data/trade-' + date +'.log')?.default;
+        fetch(currentLog)
+        .then(r => r.text())
+        .then(text => {
+          const json = JSON.parse('[' + text.trim().replace(/,$/,'') + ']');
+          const current = json[json.length-1];
+          
+          const currentStable = getStable(current);
+          const currentCrypto = getCrypto(current);
+          
+          const plStable = calcProfitLoss(startStable, currentStable);
+          const plCrypto = calcProfitLoss(startCrypto, currentCrypto);
+        
+          setData([{
+            name: 'Since ' + start?.time?.split(' ')[0],
+            startStable,
+            currentStable,
+            plStable,
+            startCrypto,
+            currentCrypto,
+            plCrypto
+          }]);
+        });
+      } catch(err) { }
     });
   }, [])
   
