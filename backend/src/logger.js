@@ -8,7 +8,12 @@ const customFormat = printf((msg) => {
 });
 
 const logger = winston.createLogger({
-  level: 'info',
+  levels: {
+    trade: 'trade',
+    info: 3,
+    warn: 2,
+    error: 1
+  },
   format: combine(
     json(),
     customFormat
@@ -21,7 +26,8 @@ const logger = winston.createLogger({
     //
     new winston.transports.File({ filename: 'error.log', level: 'error' }),
     new winston.transports.File({ filename: 'warning.log', level: 'warn' }),
-    new winston.transports.DailyRotateFile({ filename: 'trade-%DATE%.log', levle: 'info', dirname: '../frontend/src/data/', datePattern:'YYYY-MM-DD' }),
+    new winston.transports.DailyRotateFile({ filename: 'trade-%DATE%.log', level: 'info', dirname: '../frontend/src/data/', datePattern:'YYYY-MM-DD' }),
+    new winston.transports.File({ filename: 'trades.log', level: 'trade', dirname: '../frontend/src/data/' }),
   ],
 });
 

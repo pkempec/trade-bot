@@ -32,6 +32,9 @@ cron.schedule('* * * * *', async () => {
     logger.info('Stats', {time, indicator, wallet, strategy});
 
     if (strategy.action != 'WAIT') {
-        sendMessage(strategy.action + ' Bid: ' + wallet.crypto.bidPrice.toFixed(2) + ' Amount: '+ strategy.amount.toFixed(2));
+        logger.log('trade', {time, indicator, wallet, strategy});
+        const estCrypto = (wallet.crypto.value + wallet.stable.estimateCrypto).toFixed(2);
+        const estStable = (wallet.crypto.estimateStable + wallet.stable.value).toFixed(2)
+        sendMessage(strategy.action + ' Bid: ' + wallet.crypto.bidPrice.toFixed(2) + ' Amount: '+ strategy.amount.toFixed(2) + 'Est. crypto: ' + estCrypto + 'Est. stable: ' + estStable);
     }
 });
