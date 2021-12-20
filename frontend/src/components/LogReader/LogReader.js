@@ -111,7 +111,7 @@ const loadHistoryByDay = (date, logMap, setData) => {
   }
 }
 
-const loadJsonHistoryFilter = async (logMap, filter, setJsonData) => {
+const loadJsonHistoryFilter = async (logMap, filter, setJsonData, setSpinner) => {
   let json =[];
   if (logMap) {
     for(let value of logMap.values()) {
@@ -120,6 +120,7 @@ const loadJsonHistoryFilter = async (logMap, filter, setJsonData) => {
     }
   }
   setJsonData(json);
+  setSpinner(false);
 }
 
 const loadFilteredHistory = (jsonData, setData) => {
@@ -164,17 +165,18 @@ const getLogInterval = async (log, intervalFilter) => {
   return filteredJson;
 }
 
-const filter5min = (log) => {
-  return (log?.time?.endsWith('5:00') || log?.time?.endsWith('0:00'));
-}
-
-const filter15min = (log) => {
-  return (log?.time?.endsWith('00:00') || log?.time?.endsWith('15:00') || log?.time?.endsWith('30:00') || log?.time?.endsWith('45:00'));
+const filter30min = (log) => {
+  return (log?.time?.endsWith('00:00') || log?.time?.endsWith('30:00'));
 }
 
 const filter1hour = (log) => {
   return log?.time?.endsWith('00:00');
 }
+
+const filter4hour = (log) => {
+  return (log?.time?.endsWith('00:00:00') || log?.time?.endsWith('04:00:00') ||  log?.time?.endsWith('08:00:00') ||  log?.time?.endsWith('12:00:00') ||  log?.time?.endsWith('16:00:00') ||  log?.time?.endsWith('20:00:00'));
+}
+
 
 const readLog = (log, setData) => {
   fetch(log)
@@ -194,7 +196,7 @@ export {
   loadFilteredHistory,
   loadFirstLog,
   loadLastLog,
-  filter5min,
-  filter15min,
+  filter30min,
   filter1hour,
+  filter4hour,
 }

@@ -4,10 +4,11 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import ProfitLoss from '../../components/ProfitLoss/ProfitLoss';
 import TradeChart from '../../components/TradeChart/TradeChart';
-import { loadFirstLog, loadHistoryByDay, loadJsonHistoryFilter, loadFilteredHistory, loadLastLog, loadLogMap, loadTrades, filter5min, filter1hour, filter15min } from '../../components/LogReader/LogReader';
+import { loadFirstLog, loadHistoryByDay, loadJsonHistoryFilter, loadFilteredHistory, loadLastLog, loadLogMap, loadTrades, filter30min, filter1hour, filter4hour} from '../../components/LogReader/LogReader';
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
@@ -60,6 +61,7 @@ const Dashboard = () => {
   const [firstLog, setFirstLog] = useState();
   const [lastLog, setLastLog] = useState();
   const [profitLoss, setProfitLoss] = useState(emptyProfitLoss);
+  const [spinner, setSpinner] = useState(true);
 
   const [filteredData, setFilteredData] = useState(empty);
   const [filter, setFilter] = useState(() => () => filter1hour);
@@ -74,8 +76,12 @@ const Dashboard = () => {
   useEffect(() => {
     loadFirstLog(logMap, setFirstLog);
     loadLastLog(logMap, setLastLog);
-    loadJsonHistoryFilter(logMap, filter, setJsonData);
-  }, [logMap, filter]);
+  }, [logMap]);
+
+  useEffect(() => {
+    setSpinner(true);
+    loadJsonHistoryFilter(logMap, filter, setJsonData, setSpinner);
+  }, [logMap, filter])
 
   useEffect(()=> {
     loadFilteredHistory(jsonData, setFilteredData);
@@ -94,15 +100,19 @@ const Dashboard = () => {
   const handleTabChange = (event, newValue) => {
     switch(newValue){
       case 1:
-        setFilter(() => filter1hour);
+        setFilteredData(empty)
+        setFilter(() => filter4hour);
         break;
       case 2:
-        setFilter(() => filter15min);
+        setFilteredData(empty)
+        setFilter(() => filter1hour);
         break;
         case 3:
-        setFilter(() => filter5min);
+        setFilteredData(empty)
+        setFilter(() => filter30min);
         break;
       default:
+        setFilteredData(empty)
         break;
     }
     setSelectedTab(newValue);
@@ -110,13 +120,14 @@ const Dashboard = () => {
 
   return ( 
     <div>
+      <LinearProgress hidden={!spinner} />
       <ProfitLoss first={firstLog} last={lastLog} profitLoss={profitLoss} setProfitLoss={setProfitLoss} />
       <AppBar position="static">
       <Tabs value={selectedTab} onChange={handleTabChange} aria-label="simple tabs example">
           <Tab label="Daily" id='0' />
-          <Tab label="1 hour" id='1' />
-          <Tab label="15 min" id='2' />
-          <Tab label="5 min" id='3' />
+          <Tab label="4 hour" id='1' />
+          <Tab label="1 hour" id='2' />
+          <Tab label="30 min" id='3' />
           <Tab label="Trades" id='4' />
         </Tabs>
       </AppBar>
