@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,8 +7,6 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import tradeLog from '../../data/trades.log';
-import moment from 'moment';
 
 const useStyles = makeStyles({
   table: {
@@ -16,21 +14,15 @@ const useStyles = makeStyles({
   },
 });
 
-const ProfitLoss = () => {
+const ProfitLoss = (props) => {
   const classes = useStyles();
 
-  const [data, setData] = useState([{ 
-    name: 'wallet',
-    startStable: 0,
-    currentStable: 0,
-    plStable: 0,
-    startCrypto: 0,
-    currentCrypto: 0,
-    plCrypto: 0
-  }]);
+  const start =  props.first ? props.first[0] : null;
+  const current = props.last ? props.last[props.last.length-1] : null;
+  const setProfitLoss = props.setProfitLoss;
 
   useEffect(() => {
-
+    
     const getCrypto = (log) => {
       return (log.wallet?.crypto?.value + log.wallet?.stable?.estimateCrypto).toFixed(2);
     }
@@ -42,45 +34,29 @@ const ProfitLoss = () => {
     const calcProfitLoss = (start, current) => {
       return (((current/start) - 1) * 100).toFixed(2) + ' %';
     }
-  
-    fetch(tradeLog)
-    .then(r => r.text())
-    .then(text => {
-      const json = JSON.parse('[' + text.trim().replace(/,$/,'') + ']');
-      const start = json[0];
-      
+
+    if(start && current) {            
       const startStable = getStable(start);
       const startCrypto = getCrypto(start);
+  
+      const currentStable = getStable(current);
+      const currentCrypto = getCrypto(current);
       
-      const date = moment().format('YYYY-MM-DD');
-
-      try {
-        const currentLog = require('../../data/trade-' + date +'.log')?.default;
-        fetch(currentLog)
-        .then(r => r.text())
-        .then(text => {
-          const json = JSON.parse('[' + text.trim().replace(/,$/,'') + ']');
-          const current = json[json.length-1];
-          
-          const currentStable = getStable(current);
-          const currentCrypto = getCrypto(current);
-          
-          const plStable = calcProfitLoss(startStable, currentStable);
-          const plCrypto = calcProfitLoss(startCrypto, currentCrypto);
-        
-          setData([{
-            name: 'Since ' + start?.time?.split(' ')[0],
-            startStable,
-            currentStable,
-            plStable,
-            startCrypto,
-            currentCrypto,
-            plCrypto
-          }]);
-        });
-      } catch(err) { }
-    });
-  }, [])
+      const plStable = calcProfitLoss(startStable, currentStable);
+      const plCrypto = calcProfitLoss(startCrypto, currentCrypto);
+    
+      setProfitLoss([{
+        name: 'Since ' + start?.time?.split(' ')[0],
+        startStable,
+        currentStable,
+        plStable,
+        startCrypto,
+        currentCrypto,
+        plCrypto
+      }]);
+    }
+  
+  }, [start, current, setProfitLoss])
   
 
   return (
@@ -98,7 +74,7 @@ const ProfitLoss = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row) => (
+          {props.profitLoss.map((row) => (
             <TableRow key={row.name}>
               <TableCell component="th" scope="row">
                 {row.name}
