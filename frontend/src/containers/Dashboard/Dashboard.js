@@ -1,0 +1,154 @@
+import React, { useEffect, useState } from 'react';
+import { MenuItem, Select } from '@material-ui/core';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Box from '@material-ui/core/Box';
+
+import ProfitLoss from '../../components/ProfitLoss/ProfitLoss';
+import TradeChart from '../../components/TradeChart/TradeChart';
+import { loadFirstLog, loadHistoryByDay, loadJsonHistoryFilter, loadFilteredHistory, loadLastLog, loadLogMap, loadTrades, filter5min, filter1hour, filter15min } from '../../components/LogReader/LogReader';
+
+const TabPanel = (props) => {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={3}>
+          {children}
+        </Box>
+      )}
+    </div>
+  );
+}
+
+const Dashboard = () => {
+
+  const empty = {
+    labels: [''],
+    datasets: [
+      {
+        label: 'Empty',
+        data: [0],
+        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      },
+    ],
+  };
+
+  const emptyProfitLoss = [{ 
+    name: 'wallet',
+    startStable: 0,
+    currentStable: 0,
+    plStable: 0,
+    startCrypto: 0,
+    currentCrypto: 0,
+    plCrypto: 0
+  }]
+
+  const [trades, setTrades] = useState(empty);
+  const [log, setLog] = useState(empty);
+  const [logMap, setLogMap] = useState(new Map())
+  const [select, setSelect] = useState('');
+  const [firstLog, setFirstLog] = useState();
+  const [lastLog, setLastLog] = useState();
+  const [profitLoss, setProfitLoss] = useState(emptyProfitLoss);
+
+  const [filteredData, setFilteredData] = useState(empty);
+  const [filter, setFilter] = useState(() => () => filter1hour);
+
+  const [jsonData, setJsonData] = useState([]);
+
+  useEffect(() => {
+    loadTrades(setTrades);
+    loadLogMap(setLogMap, setSelect);
+  }, []);
+
+  useEffect(() => {
+    loadFirstLog(logMap, setFirstLog);
+    loadLastLog(logMap, setLastLog);
+    loadJsonHistoryFilter(logMap, filter, setJsonData);
+  }, [logMap, filter]);
+
+  useEffect(()=> {
+    loadFilteredHistory(jsonData, setFilteredData);
+  }, [jsonData]);
+
+  useEffect(() => {
+    loadHistoryByDay(select, logMap, setLog);
+  }, [select, logMap]);
+
+  const handleDateSelection = (event) => {
+    setSelect(event.target.value);
+  };
+
+  const [selectedTab, setSelectedTab] = React.useState(0);
+
+  const handleTabChange = (event, newValue) => {
+    switch(newValue){
+      case 1:
+        setFilter(() => filter1hour);
+        break;
+      case 2:
+        setFilter(() => filter15min);
+        break;
+        case 3:
+        setFilter(() => filter5min);
+        break;
+      default:
+        break;
+    }
+    setSelectedTab(newValue);
+  };
+
+  return ( 
+    <div>
+      <ProfitLoss first={firstLog} last={lastLog} profitLoss={profitLoss} setProfitLoss={setProfitLoss} />
+      <AppBar position="static">
+      <Tabs value={selectedTab} onChange={handleTabChange} aria-label="simple tabs example">
+          <Tab label="Daily" id='0' />
+          <Tab label="1 hour" id='1' />
+          <Tab label="15 min" id='2' />
+          <Tab label="5 min" id='3' />
+          <Tab label="Trades" id='4' />
+        </Tabs>
+      </AppBar>
+      <TabPanel value={selectedTab} index={0}>
+        <Select
+            labelId="date-label"
+            id="date-id"
+            value={select}
+            onChange={handleDateSelection}
+        >
+          {
+            [...logMap.keys()].map(key =>
+              <MenuItem value={key} key={key}>{key}</MenuItem>
+            )
+          }
+        </Select>
+        <TradeChart data={log} />
+      </TabPanel>
+      <TabPanel value={selectedTab} index={1}>
+        <TradeChart data={filteredData} />
+      </TabPanel>
+      <TabPanel value={selectedTab} index={2}>
+        <TradeChart data={filteredData} />
+      </TabPanel>
+      <TabPanel value={selectedTab} index={3}>
+        <TradeChart data={filteredData} />
+      </TabPanel>
+      <TabPanel value={selectedTab} index={4}>
+        <TradeChart data={trades} />
+      </TabPanel>
+    </div>
+    );
+}
+
+export default Dashboard;
