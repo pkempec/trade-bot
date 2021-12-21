@@ -1,3 +1,20 @@
-.App {
-  text-align: center;
+.rotate {
+  display: none;
+}
+@media only screen and (max-width: 639px) {
+  .app {
+    display: none;
+  }
+  .rotate {
+    display: block;
+    background-image: url('./img/rotate.png');
+    background-size: 70px;
+    height: 70px;
+    width: 70px;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }

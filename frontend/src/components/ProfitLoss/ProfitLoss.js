@@ -1,28 +1,31 @@
 import React, { useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import { themeDark} from '../Theme/Theme';
 
-const useStyles = makeStyles({
-  table: {
-    minWidth: 650,
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    borderColor: themeDark.palette.secondary.main,
+    textTransform: 'uppercase',
   },
-});
+  body: {
+    borderColor: themeDark.palette.secondary.main,
+  }
+}))(TableCell);
 
 const ProfitLoss = (props) => {
-  const classes = useStyles();
 
   const start =  props.first ? props.first[0] : null;
   const current = props.last ? props.last[props.last.length-1] : null;
   const setProfitLoss = props.setProfitLoss;
 
   useEffect(() => {
-    
+
     const getCrypto = (log) => {
       return (log.wallet?.crypto?.value + log.wallet?.stable?.estimateCrypto).toFixed(2);
     }
@@ -60,31 +63,31 @@ const ProfitLoss = (props) => {
   
 
   return (
-    <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="simple table">
+    <TableContainer>
+      <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Profit/Loss</TableCell>
-            <TableCell align="right">Start Stable</TableCell>
-            <TableCell align="right">Current Stable</TableCell>
-            <TableCell align="right">P/L</TableCell>
-            <TableCell align="right">Start Crypto</TableCell>
-            <TableCell align="right">Current Crypto</TableCell>
-            <TableCell align="right">P/L</TableCell>
+            <StyledTableCell>Profit/Loss</StyledTableCell>
+            <StyledTableCell align="right">Start Stable</StyledTableCell>
+            <StyledTableCell align="right">Current Stable</StyledTableCell>
+            <StyledTableCell align="right">P/L</StyledTableCell>
+            <StyledTableCell align="right">Start Crypto</StyledTableCell>
+            <StyledTableCell align="right">Current Crypto</StyledTableCell>
+            <StyledTableCell align="right">P/L</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {props.profitLoss.map((row) => (
             <TableRow key={row.name}>
-              <TableCell component="th" scope="row">
+              <StyledTableCell component="th" scope="row">
                 {row.name}
-              </TableCell>
-              <TableCell align="right">{row.startStable}</TableCell>
-              <TableCell align="right">{row.currentStable}</TableCell>
-              <TableCell align="right">{row.plStable}</TableCell>
-              <TableCell align="right">{row.startCrypto}</TableCell>
-              <TableCell align="right">{row.currentCrypto}</TableCell>
-              <TableCell align="right">{row.plCrypto}</TableCell>
+              </StyledTableCell>
+              <StyledTableCell align="right">{row.startStable}</StyledTableCell>
+              <StyledTableCell align="right">{row.currentStable}</StyledTableCell>
+              <StyledTableCell align="right">{row.plStable}</StyledTableCell>
+              <StyledTableCell align="right">{row.startCrypto}</StyledTableCell>
+              <StyledTableCell align="right">{row.currentCrypto}</StyledTableCell>
+              <StyledTableCell align="right">{row.plCrypto}</StyledTableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -1,20 +1,6 @@
 
 import tradeLog from '../../data/trades.log';
 
-const colors = [
-  '#FF3784',
-  '#36A2EB',
-  '#4BC0C0',
-  'rgba(247,147,26, 0.5)',
-  'rgba(55, 159, 122, 0.5)',
-  '#9966FF',
-  '#00A8C6',
-  '#CC2738',
-  '#8B628A',
-  '#8FBE00',
-  '#606060',
-];
-
 const parseJsonData = (json) => {
     
   const radius = (context) => {
@@ -40,8 +26,8 @@ const parseJsonData = (json) => {
         data: json.map(log => log.wallet?.total?.estimate),
         action: json.map(log => log.strategy?.action),
         symbol: true,
-        borderColor: colors[0],
-        backgroundColor: colors[0],
+        borderColor: '#FF4286',
+        backgroundColor: '#FF4286',
         yAxisID: 'y1',
         pointRadius: radius,
         // tension: 0.4,
@@ -50,44 +36,46 @@ const parseJsonData = (json) => {
         label: 'RSI',
         data: json.map(log => log.indicator?.value),
         action: json.map(log => log.strategy?.action),
-        borderColor: colors[1],
-        backgroundColor: colors[1],
+        borderColor: '#FF6C52',
+        backgroundColor: '#FF6C52',
         yAxisID: 'y1',
       },
       {
         label: 'Price',
         data: json.map(log => log.wallet?.crypto?.askPrice),
         action: json.map(log => log.strategy?.action),
-        borderColor: colors[2],
-        backgroundColor: colors[2],
+        borderColor: '#AF5CFC',
+        backgroundColor: '#AF5CFC',
         yAxisID: 'y1',
       },
       {
         label: 'Stable',
         data: json.map(log => log.wallet?.stable?.value),
-        borderColor: colors[4],
-        backgroundColor: colors[4],
+        borderColor: '#007D51',
+        backgroundColor: '#007D51',
         fill: true,
         yAxisID: 'y',
       },
       {
         label: 'Crypto',
         data: json.map(log => log.wallet?.crypto?.estimateStable),
-        borderColor: colors[3],
-        backgroundColor: colors[3],
+        borderColor: '#FFE37B',
+        backgroundColor: '#FFE37B',
         fill: true,
         yAxisID: 'y',
       },
       {
         label: 'Est Total Stable',
         data: json.map(log => (log.wallet?.stable?.value + log.wallet?.crypto?.estimateStable).toFixed(2)),
-        borderColor: 'blue',
+        borderColor: '#005D57',
+        backgroundColor: '#005D57',
         yAxisID: 'y1',
       },
       {
         label: 'Est. Total Crypto',
         data: json.map(log => (log.wallet?.crypto?.value + log.wallet?.stable?.estimateCrypto).toFixed(2)),
-        borderColor: 'purple',
+        borderColor: '#37EFBA',
+        backgroundColor: '#37EFBA',
         yAxisID: 'y1',
       },
     ],
