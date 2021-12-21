@@ -1,88 +1,6 @@
 
 import tradeLog from '../../data/trades.log';
 
-const parseJsonData = (json) => {
-    
-  const radius = (context) => {
-    let radius = 0;
-    switch(context.dataset?.action?.[context.dataIndex]) {
-      case 'SELL':
-        radius = 4;
-        break;
-        case 'BUY':
-        radius = 4;
-        break;
-      default:
-        break;
-    }
-    return radius;
-  }
-
-  const data =  {
-    labels : json.map(log => log.time),
-    datasets: [
-      {
-        label: 'USD',
-        data: json.map(log => log.wallet?.total?.estimate),
-        action: json.map(log => log.strategy?.action),
-        symbol: true,
-        borderColor: '#FF4286',
-        backgroundColor: '#FF4286',
-        yAxisID: 'y1',
-        pointRadius: radius,
-        // tension: 0.4,
-      },
-      {
-        label: 'RSI',
-        data: json.map(log => log.indicator?.value),
-        action: json.map(log => log.strategy?.action),
-        borderColor: '#FF6C52',
-        backgroundColor: '#FF6C52',
-        yAxisID: 'y1',
-      },
-      {
-        label: 'Price',
-        data: json.map(log => log.wallet?.crypto?.askPrice),
-        action: json.map(log => log.strategy?.action),
-        borderColor: '#AF5CFC',
-        backgroundColor: '#AF5CFC',
-        yAxisID: 'y1',
-      },
-      {
-        label: 'Stable',
-        data: json.map(log => log.wallet?.stable?.value),
-        borderColor: '#007D51',
-        backgroundColor: '#007D51',
-        fill: true,
-        yAxisID: 'y',
-      },
-      {
-        label: 'Crypto',
-        data: json.map(log => log.wallet?.crypto?.estimateStable),
-        borderColor: '#FFE37B',
-        backgroundColor: '#FFE37B',
-        fill: true,
-        yAxisID: 'y',
-      },
-      {
-        label: 'Est Total Stable',
-        data: json.map(log => (log.wallet?.stable?.value + log.wallet?.crypto?.estimateStable).toFixed(2)),
-        borderColor: '#005D57',
-        backgroundColor: '#005D57',
-        yAxisID: 'y1',
-      },
-      {
-        label: 'Est. Total Crypto',
-        data: json.map(log => (log.wallet?.crypto?.value + log.wallet?.stable?.estimateCrypto).toFixed(2)),
-        borderColor: '#37EFBA',
-        backgroundColor: '#37EFBA',
-        yAxisID: 'y1',
-      },
-    ],
-  };
-  return data;
-}
-
 const loadLogMap = (setLogMap, setSelect) => {
   const importAll = (r) => {
     return r.keys().map(r);
@@ -109,11 +27,6 @@ const loadJsonHistoryFilter = async (logMap, filter, setJsonData, setSpinner) =>
   }
   setJsonData(json);
   setSpinner(false);
-}
-
-const loadFilteredHistory = (jsonData, setData) => {
-  const data = parseJsonData(jsonData);
-  setData(data);
 }
 
 const loadTrades = (setData) => {
@@ -171,8 +84,7 @@ const readLog = (log, setData) => {
   .then(r => r.text())
   .then(text => {
     const json = JSON.parse('[' + text.trim().replace(/,$/,'') + ']');
-    const data = parseJsonData(json);
-    setData(data);
+    setData(json);
   });
 }
 
@@ -181,7 +93,6 @@ export {
   loadTrades,
   loadHistoryByDay,
   loadJsonHistoryFilter,
-  loadFilteredHistory,
   loadFirstLog,
   loadLastLog,
   filter30min,

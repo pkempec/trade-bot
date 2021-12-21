@@ -177,7 +177,7 @@ const TradeChart = (props) => {
 
   return ( 
     <div>
-      <Line options={options} data={props.data} />
+      <Line options={options} data={parseJsonData(props.data)} />
     </div>
     );
 }

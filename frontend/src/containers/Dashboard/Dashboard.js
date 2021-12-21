@@ -8,7 +8,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 
 import ProfitLoss from '../../components/ProfitLoss/ProfitLoss';
 import TradeChart from '../../components/TradeChart/TradeChart';
-import { loadFirstLog, loadHistoryByDay, loadJsonHistoryFilter, loadFilteredHistory, loadLastLog, loadLogMap, loadTrades, filter30min, filter1hour, filter4hour} from '../../components/LogReader/LogReader';
+import { loadFirstLog, loadHistoryByDay, loadJsonHistoryFilter, loadLastLog, loadLogMap, loadTrades, filter30min, filter1hour, filter4hour} from '../../components/LogReader/LogReader';
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
@@ -31,18 +31,7 @@ const TabPanel = (props) => {
 }
 
 const Dashboard = () => {
-
-  const empty = {
-    labels: [''],
-    datasets: [
-      {
-        label: 'Empty',
-        data: [0],
-        borderColor: 'rgb(255, 99, 132)',
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-      },
-    ],
-  };
+  const empty = [];
 
   const emptyProfitLoss = [{ 
     name: 'wallet',
@@ -63,7 +52,6 @@ const Dashboard = () => {
   const [profitLoss, setProfitLoss] = useState(emptyProfitLoss);
   const [spinner, setSpinner] = useState(true);
 
-  const [filteredData, setFilteredData] = useState(empty);
   const [filter, setFilter] = useState(() => () => filter1hour);
 
   const [jsonData, setJsonData] = useState([]);
@@ -83,10 +71,6 @@ const Dashboard = () => {
     loadJsonHistoryFilter(logMap, filter, setJsonData, setSpinner);
   }, [logMap, filter])
 
-  useEffect(()=> {
-    loadFilteredHistory(jsonData, setFilteredData);
-  }, [jsonData]);
-
   useEffect(() => {
     loadHistoryByDay(select, logMap, setLog);
   }, [select, logMap]);
@@ -100,19 +84,19 @@ const Dashboard = () => {
   const handleTabChange = (event, newValue) => {
     switch(newValue){
       case 1:
-        setFilteredData(empty)
+        setJsonData(empty)
         setFilter(() => filter4hour);
         break;
       case 2:
-        setFilteredData(empty)
+        setJsonData(empty)
         setFilter(() => filter1hour);
         break;
         case 3:
-        setFilteredData(empty)
+        setJsonData(empty)
         setFilter(() => filter30min);
         break;
       default:
-        setFilteredData(empty)
+        setJsonData(empty)
         break;
     }
     setSelectedTab(newValue);
@@ -147,13 +131,13 @@ const Dashboard = () => {
         <TradeChart data={log} />
       </TabPanel>
       <TabPanel value={selectedTab} index={1}>
-        <TradeChart data={filteredData} />
+        <TradeChart data={jsonData} />
       </TabPanel>
       <TabPanel value={selectedTab} index={2}>
-        <TradeChart data={filteredData} />
+        <TradeChart data={jsonData} />
       </TabPanel>
       <TabPanel value={selectedTab} index={3}>
-        <TradeChart data={filteredData} />
+        <TradeChart data={jsonData} />
       </TabPanel>
       <TabPanel value={selectedTab} index={4}>
         <TradeChart data={trades} />
