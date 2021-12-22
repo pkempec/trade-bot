@@ -42,21 +42,27 @@ const ProfitLoss = (props) => {
       const startStable = getStable(start);
       const startCrypto = getCrypto(start);
   
-      const currentStable = getStable(current);
-      const currentCrypto = getCrypto(current);
+      const currentEstimatedStable = getStable(current);
+      const currentEstimatedCrypto = getCrypto(current);
       
-      const plStable = calcProfitLoss(startStable, currentStable);
-      const plCrypto = calcProfitLoss(startCrypto, currentCrypto);
+      const currentStable = (current.wallet?.stable?.value).toFixed(2);
+      const currentCrypto = (current.wallet?.crypto?.value).toFixed(2);
+      
+      const plStable = calcProfitLoss(startStable, currentEstimatedStable);
+      const plCrypto = calcProfitLoss(startCrypto, currentEstimatedCrypto);
     
-      setProfitLoss([{
-        name: 'Since ' + start?.time?.split(' ')[0],
+      setProfitLoss({
+        since: 'Since ' + start?.time?.split(' ')[0],
+        name: 'Wallet',
         startStable,
-        currentStable,
+        currentEstimatedStable,
         plStable,
         startCrypto,
-        currentCrypto,
-        plCrypto
-      }]);
+        currentEstimatedCrypto,
+        plCrypto,
+        currentStable,
+        currentCrypto
+      });
     }
   
   }, [start, current, setProfitLoss])
@@ -77,19 +83,32 @@ const ProfitLoss = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.profitLoss.map((row) => (
-            <TableRow key={row.name}>
+          {
+            <TableRow key={props.profitLoss.since}>
               <StyledTableCell component="th" scope="row">
-                {row.name}
+                {props.profitLoss.since}
               </StyledTableCell>
-              <StyledTableCell align="right">{row.startStable}</StyledTableCell>
-              <StyledTableCell align="right">{row.currentStable}</StyledTableCell>
-              <StyledTableCell align="right">{row.plStable}</StyledTableCell>
-              <StyledTableCell align="right">{row.startCrypto}</StyledTableCell>
-              <StyledTableCell align="right">{row.currentCrypto}</StyledTableCell>
-              <StyledTableCell align="right">{row.plCrypto}</StyledTableCell>
+              <StyledTableCell align="right">{props.profitLoss.startStable}</StyledTableCell>
+              <StyledTableCell align="right">{props.profitLoss.currentEstimatedStable}</StyledTableCell>
+              <StyledTableCell align="right">{props.profitLoss.plStable}</StyledTableCell>
+              <StyledTableCell align="right">{props.profitLoss.startCrypto}</StyledTableCell>
+              <StyledTableCell align="right">{props.profitLoss.currentEstimatedCrypto}</StyledTableCell>
+              <StyledTableCell align="right">{props.profitLoss.plCrypto}</StyledTableCell>
             </TableRow>
-          ))}
+          }
+          {
+            <TableRow key={props.profitLoss.name}>
+              <StyledTableCell component="th" scope="row">
+                {props.profitLoss.name}
+              </StyledTableCell>
+              <StyledTableCell align="right"></StyledTableCell>
+              <StyledTableCell align="right">{props.profitLoss.currentStable}</StyledTableCell>
+              <StyledTableCell align="right"></StyledTableCell>
+              <StyledTableCell align="right"></StyledTableCell>
+              <StyledTableCell align="right">{props.profitLoss.currentCrypto}</StyledTableCell>
+              <StyledTableCell align="right"></StyledTableCell>
+            </TableRow>
+          }
         </TableBody>
       </Table>
     </TableContainer>
