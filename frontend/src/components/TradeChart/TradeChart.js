@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 import {
   Chart as ChartJS,
@@ -29,6 +29,8 @@ ChartJS.register(
 );
 
 const TradeChart = (props) => {
+  const chartRef = useRef();
+
   const options = {
     scales: {
       y: {
@@ -93,8 +95,24 @@ const TradeChart = (props) => {
     },
   };
 
-  const parseJsonData = (json) => {
+  const createGradient = (r,g,b) => {
+    const chart = chartRef.current;
+    let color = 'rgb('+ r + ',' + g + ',' + b + ')';
+
+    if (chart) {
+      color = chart.ctx.createLinearGradient(0, 0, 0, 500);
+      color.addColorStop(0, 'rgba('+ r + ',' + g + ',' + b + ', 0.1)');
+      color.addColorStop(0.5, 'rgba('+ r + ',' + g + ',' + b + ', 0.3)');
+      color.addColorStop(1, 'rgba('+ r + ',' + g + ',' + b + ', 0.7)');
+    }
+    return color;
+  }
+
+  const parseJsonData = (json) => {  
     
+    let gradientCrypto = createGradient('255', '227', '123');
+    let gradientStable = createGradient('0', '125', '81');
+  
     const radius = (context) => {
       let radius = 0;
       switch(context.dataset?.action?.[context.dataIndex]) {
@@ -144,7 +162,7 @@ const TradeChart = (props) => {
           label: 'Stable',
           data: json.map(log => log.wallet?.stable?.value),
           borderColor: '#007D51',
-          backgroundColor: '#007D51',
+          backgroundColor: gradientStable,
           fill: true,
           yAxisID: 'y',
         },
@@ -152,7 +170,7 @@ const TradeChart = (props) => {
           label: 'Crypto',
           data: json.map(log => log.wallet?.crypto?.estimateStable),
           borderColor: '#FFE37B',
-          backgroundColor: '#FFE37B',
+          backgroundColor: gradientCrypto,
           fill: true,
           yAxisID: 'y',
         },
@@ -177,7 +195,7 @@ const TradeChart = (props) => {
 
   return ( 
     <div>
-      <Line options={options} data={parseJsonData(props.data)} />
+      <Line ref={chartRef} options={options} data={parseJsonData(props.data)} />
     </div>
     );
 }
