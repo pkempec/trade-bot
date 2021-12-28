@@ -11,7 +11,7 @@ const sendMessage = (message) => {
 const initCommunication = () => {
   bot.onText(/\/status/, ()=> {
     const wallet = getWallet();
-    const message = wallet.crypto? 'Crypto: ' + wallet.crypto.value + ' Stable: ' + wallet.stable.value : wallet;
+    const message = wallet.crypto? 'Crypto: ' + wallet.crypto.value.toFixed(2) + ' Stable: ' + wallet.stable.value.toFixed(2) : wallet;
     bot.sendMessage(TELEGRAM_CHAT_ID, message);
   });
 }
