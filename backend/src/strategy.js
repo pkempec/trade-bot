@@ -37,7 +37,7 @@ const calculateInvestmentValue = (wallet, perc, action) => {
     const invest = (value / 100) * perc;
     if (invest < 11) {
         //usually there is limit and with such a fraction is not allowed to be traded
-        logger.warn('Strategy', { reason: 'Low Limit: '+ invest});
+        // logger.warn('Strategy', { reason: 'Low Limit: '+ invest});
         return 0;
     }
     return Number(invest.toFixed(2));
