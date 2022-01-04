@@ -1,7 +1,12 @@
 const winston = require('winston');
 require('winston-daily-rotate-file');
+const fs = require('fs');
+const path = require('path');
+
 const { format } = winston;
 const { combine, printf, json } = format;
+const LOG_PATH = '../frontend/src/data/';
+const LOG_TRADES = 'trades.log';
 
 const customFormat = printf((msg) => {
   return `${JSON.stringify(msg)},`;
@@ -26,8 +31,8 @@ const logger = winston.createLogger({
     //
     new winston.transports.File({ filename: 'error.log', level: 'error' }),
     new winston.transports.File({ filename: 'warning.log', level: 'warn' }),
-    new winston.transports.DailyRotateFile({ filename: 'trade-%DATE%.log', level: 'info', dirname: '../frontend/src/data/', datePattern:'YYYY-MM-DD' }),
-    new winston.transports.File({ filename: 'trades.log', level: 'trade', dirname: '../frontend/src/data/' }),
+    new winston.transports.DailyRotateFile({ filename: 'trade-%DATE%.log', level: 'info', dirname: LOG_PATH, datePattern:'YYYY-MM-DD' }),
+    new winston.transports.File({ filename: LOG_TRADES, level: 'trade', dirname: LOG_PATH }),
   ],
 });
 
@@ -45,6 +50,14 @@ if (process.env.NODE_ENV !== 'production') {
   }));
 }
 
+const loadLastTrade = () => {
+  const filePath = path.join(LOG_PATH, LOG_TRADES);
+  const text = fs.readFileSync(filePath).toString();
+  const json = JSON.parse('[' + text.trim().replace(/,$/,'') + ']');
+  return json[json.length - 1];
+}
+
 module.exports = {
   logger: logger,
+  loadLastTrade: loadLastTrade,
 };

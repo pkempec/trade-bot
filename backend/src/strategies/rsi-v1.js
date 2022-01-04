@@ -1,4 +1,4 @@
-const { logger } = require('./logger');
+const { logger } = require('../logger');
 
 const getStrategy = (indicator, wallet) => {
     if (wallet === undefined) {

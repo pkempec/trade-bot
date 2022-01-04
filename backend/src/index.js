@@ -1,11 +1,11 @@
 require('dotenv').config();
 var moment = require('moment');
 const { analyze } = require('./analyzer');
-const { getStrategy } = require('./strategy');
+const { getStrategy } = require('./strategies/rsi-v1');
 const { trade, getWallet } = require('./binance');
 const { sendMessage, initCommunication } = require('./notification');
 const { setWallet } = require('./wallet');
-const { logger } = require('./logger');
+const { logger, loadLastTrade } = require('./logger');
 
 var cron = require('node-cron');
 
@@ -18,6 +18,7 @@ const TAAPI_CRYPTO = CRYPTO + '/' + STABLE;
 const BINANCE_CRYPTO_SYMBOL = CRYPTO + STABLE;
 
 initCommunication();
+let lastTrade = loadLastTrade();
 
 cron.schedule('* * * * *', async () => {
     const time = moment().format('YYYY.MM.DD HH:mm:ss');
@@ -37,6 +38,7 @@ cron.schedule('* * * * *', async () => {
 
     if (strategy.action != 'WAIT') {
         logger.log('trade', {time, indicator, wallet, strategy});
+        lastTrade = {time, indicator, wallet, strategy};
         const estCrypto = (wallet.crypto.value + wallet.stable.estimateCrypto).toFixed(2);
         const estStable = (wallet.crypto.estimateStable + wallet.stable.value).toFixed(2);
         sendMessage(strategy.action + '\nBid: ' + wallet.crypto.bidPrice.toFixed(2) + '\nAmount: '+ strategy.amount.toFixed(2) + '\nEst. crypto: ' + estCrypto + '\nEst. stable: ' + estStable);
