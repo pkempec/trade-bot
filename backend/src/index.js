@@ -2,6 +2,7 @@ require('dotenv').config();
 var moment = require('moment');
 const { analyze } = require('./analyzer');
 const { getStrategy } = require('./strategies/rsi-v1');
+// const { getStrategy } = require('./strategies/rsi-v2');
 const { trade, getWallet } = require('./binance');
 const { sendMessage, initCommunication } = require('./notification');
 const { setWallet } = require('./wallet');
@@ -26,7 +27,7 @@ cron.schedule('* * * * *', async () => {
     const indicatorValue = await analyze(INDICATOR_TYPE, TAAPI_CRYPTO, INTERVAL);
     const wallet = await getWallet(CRYPTO, STABLE);
     setWallet(wallet);
-    const strategy = getStrategy(indicatorValue, wallet);
+    const strategy = getStrategy(indicatorValue, wallet, lastTrade);
     trade(strategy, BINANCE_CRYPTO_SYMBOL);
 
     const indicator = {
