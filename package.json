@@ -7,6 +7,7 @@
   "scripts": {
     "install": "yarn --cwd backend install && yarn --cwd frontend install",
     "start-backend": "yarn --cwd backend start",
+    "start-simulation": "yarn --cwd backend simulate",
     "start-frontend": "yarn --cwd frontend start"
   },
   "dependencies": {}

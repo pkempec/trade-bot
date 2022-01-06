@@ -1,3 +1,11 @@
+/*
+ RSI strategy with combination of percentual profit 
+ SELL 98% of crypto when ( RSI reach value higher than 75 or is in profit since last trade compared to stable coin )
+ SELL 50% of crypto when ( RSI is between 70 and 75 and crypto in wallet is more than 60% )
+ BUY  98% of crypto when ( RSI reach value lower than 25 or is in profit since last trade compared to crypto coin )
+ BUY  50% of crypto when ( RSI is between 25 and 30 and crypto in wallet is less than 51% )
+*/
+
 const { logger } = require('../logger');
 
 const getStrategy = (indicator, wallet, lastTrade) => {

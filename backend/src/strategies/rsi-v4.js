@@ -1,9 +1,7 @@
 /*
- RSI strategy 
- SELL 98% of crypto when RSI reach value higher than 75
- SELL 50% of crypto when RSI is between 70 and 75 and crypto in wallet is more than 60%
- BUY  98% of crypto when RSI reach value lower than 25
- BUY  50% of crypto when RSI is between 25 and 30 and crypto in wallet is less than 51%
+ Simple RSI strategy 
+ SELL 98% of crypto when RSI reach value higher than 70
+ BUY 98% of crypto when RSI reach value lower than 30
 */
 
 const { logger } = require('../logger');
@@ -18,18 +16,10 @@ const getStrategy = (indicator, wallet) => {
         return { action: 'WAIT', amount: 0, level: 0 };
     }
 
-    const stablePerc = (wallet.stable.estimateCrypto / (wallet.stable.estimateCrypto + wallet.crypto.value)) * 100;
-    const cryptoPerc = (100 - stablePerc);
-    if (indicator > 75) {
+    if (indicator > 70) {
         const invest = calculateInvestmentValue(wallet, 98, 'SELL');
         return { action: invest > 0 ? 'SELL' : 'WAIT', amount: invest, level: 1 };
-    } else if (indicator > 70 && cryptoPerc > 60) {
-        const invest = calculateInvestmentValue(wallet, 50, 'SELL');
-        return { action: invest > 0 ? 'SELL' : 'WAIT', amount: invest, level: 2 };
-    } else if (indicator > 25 && indicator < 30 && cryptoPerc < 51) {
-        const invest = calculateInvestmentValue(wallet, 50, 'BUY');
-        return { action: invest > 0 ? 'BUY' : 'WAIT', amount: invest, level: 2 };
-    } else if (indicator <= 25) {
+    } else if (indicator <= 30) {
         const invest = calculateInvestmentValue(wallet, 98, 'BUY');
         return { action: invest > 0 ? 'BUY' : 'WAIT', amount: invest, level: 1 };
     } else {

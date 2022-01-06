@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "build": "babel src -d lib",
-    "start": "nodemon --exec babel-node ./src/index.js"
+    "start": "nodemon --exec babel-node ./src/index.js",
+    "simulate": "nodemon --exec babel-node ./src/simulator.js"
   },
   "dependencies": {
     "@babel/runtime": "^7.16.3",
