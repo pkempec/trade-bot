@@ -2,6 +2,7 @@
  Simple Profit strategy 
  SELL 98% of crypto when stable coin is in 5% profit since last trade
  BUY 98% of crypto when crypto coin is in 5% profit since last trade
+ MIGHT GET STUCK - when coin never reach its tops/lows
 */
 
 const { logger } = require('../logger');
