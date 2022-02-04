@@ -40,10 +40,15 @@ const ProfitLoss = (props) => {
     }
 
     const calcSinceLastTrade = (lastTrade, current) => {
-      if (lastTrade.strategy.action === 'BUY') {
-        return (current.wallet.crypto.askPrice - lastTrade.wallet.crypto.askPrice).toFixed(2);
-      }
-      return (lastTrade.wallet.crypto.askPrice - current.wallet.crypto.askPrice).toFixed(2);
+      if (current?.wallet?.crypto?.askPrice
+        && lastTrade?.wallet?.crypto?.askPrice
+        && lastTrade?.strategy?.action) {
+          if (lastTrade.strategy.action === 'BUY') {
+            return (current.wallet.crypto.askPrice - lastTrade.wallet.crypto.askPrice).toFixed(2);
+          }
+          return (lastTrade.wallet.crypto.askPrice - current.wallet.crypto.askPrice).toFixed(2);
+        }
+        return '';
     }
 
     if(start && current) {            
@@ -115,8 +120,8 @@ const ProfitLoss = (props) => {
             <StyledTableCell align="right"></StyledTableCell>
             <StyledTableCell align="right"></StyledTableCell>
             <StyledTableCell align="right"></StyledTableCell>
-            <StyledTableCell align="right">{lastTrade.strategy.action + ' for ' + lastTrade.wallet.crypto.askPrice}</StyledTableCell>
-            <StyledTableCell align="right">Current {current.wallet.crypto.askPrice}</StyledTableCell>
+            <StyledTableCell align="right">{lastTrade?.strategy?.action + ' for ' + lastTrade?.wallet?.crypto?.askPrice}</StyledTableCell>
+            <StyledTableCell align="right">Current {current?.wallet?.crypto?.askPrice}</StyledTableCell>
             <StyledTableCell align="right">{props.profitLoss.sinceLastTrade}</StyledTableCell>
           </TableRow>
         </TableBody>
