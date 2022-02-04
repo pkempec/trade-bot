@@ -65,7 +65,6 @@ const TradeChart = (props) => {
     responsive: true,
     plugins: {
       datalabels: {
-        rotation: -45,
         align : 'top',
         display: function(context) {
           const isCurrent = context.dataIndex === context.dataset?.action?.length - 1
@@ -76,13 +75,18 @@ const TradeChart = (props) => {
           let color = 'black';
           const action = context.dataset?.action?.[context.dataIndex];
           if (action === 'SELL') {
-            color = '#FF3784';
+            color = 'white';
           } else if (action === 'BUY') {
-            color = '#36A2EB';
+            color = 'white';
           } else if(context.dataIndex === context.dataset?.action?.length - 1) {
-            color = "#007D51";
+            color = "white";
           }
           return color;
+        },
+        font: function(context) {
+          return {
+            size: 12,
+          }
         },
         formatter: function(value, context) {
           let actionSymbol = '';
