@@ -105,7 +105,7 @@ const Dashboard = () => {
   return ( 
     <div>
       <LinearProgress hidden={!spinner} />
-      <ProfitLoss first={firstLog} last={lastLog} profitLoss={profitLoss} setProfitLoss={setProfitLoss} />
+      <ProfitLoss first={firstLog} last={lastLog} lastTrade={trades[trades.length-1]} profitLoss={profitLoss} setProfitLoss={setProfitLoss} />
       <AppBar position="static">
       <Tabs value={selectedTab} onChange={handleTabChange} aria-label="simple tabs example">
           <Tab label="Daily" id='0' />
