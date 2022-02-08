@@ -81,7 +81,7 @@ const simulate = () => {
     
     let counter = 0;
     for (let point of data) {
-        const time = counter;
+        const time = counter + ' x' ;
         if (point && point.indicator && point.indicator.value && point.wallet && point.wallet.crypto && point.wallet.crypto.value) {            
             const indicatorValue = Number(point.indicator.value);
             wallet = updateOffers(point, wallet);
