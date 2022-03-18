@@ -65,16 +65,17 @@ const ProfitLoss = (props) => {
   
       const currentEstimatedStable = getStable(current);
       const currentEstimatedCrypto = getCrypto(current);
+      const estimateHodl = calcHodl(lastTrade, startCrypto);
       
       const currentStable = (current.wallet?.stable?.value).toFixed(2);
       const currentCrypto = (current.wallet?.crypto?.value).toFixed(2);
       
       const plStable = calcProfitLoss(startStable, currentEstimatedStable);
       const plCrypto = calcProfitLoss(startCrypto, currentEstimatedCrypto);
+      const plHodl = calcProfitLoss(estimateHodl, currentEstimatedStable);
 
       const sinceLastTrade = calcSinceLastTrade(lastTrade, current);
 
-      const estimateHodl = calcHodl(lastTrade, startCrypto);
     
       setProfitLoss({
         startStable,
@@ -87,7 +88,8 @@ const ProfitLoss = (props) => {
         currentCrypto,
         sinceLastTrade,
         estimateHodl,
-        cryptoSymbol
+        cryptoSymbol,
+        plHodl
       });
     }
   
@@ -99,11 +101,11 @@ const ProfitLoss = (props) => {
       <Table>
         <TableHead>
           <TableRow>
-            <StyledTableCell>{'Start ' + start?.time?.split(' ')[0] + ' - ' + props.profitLoss.startStable + ' $'}</StyledTableCell>
+            <StyledTableCell>Start {start?.time?.split(' ')[0] + ' (' + props.profitLoss.startStable + ' $)'}</StyledTableCell>
             <StyledTableCell align="right">Hodl</StyledTableCell>
             <StyledTableCell align="right">Current Est.</StyledTableCell>
             <StyledTableCell align="right">Wallet</StyledTableCell>
-            <StyledTableCell align="right">P/L</StyledTableCell>
+            <StyledTableCell align="right">P/L ({props.profitLoss.plStable})</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -112,7 +114,7 @@ const ProfitLoss = (props) => {
             <StyledTableCell align="right">{props.profitLoss.estimateHodl + ' $'}</StyledTableCell>
             <StyledTableCell align="right">{props.profitLoss.currentEstimatedStable + ' $'}</StyledTableCell>
             <StyledTableCell align="right">{props.profitLoss.currentStable + ' $'}</StyledTableCell>
-            <StyledTableCell align="right">{props.profitLoss.plStable}</StyledTableCell>
+            <StyledTableCell align="right">{props.profitLoss.plHodl}</StyledTableCell>
           </TableRow>
           <TableRow key={props.profitLoss.name}>
             <StyledTableCell component="th" scope="row">Crypto</StyledTableCell>
