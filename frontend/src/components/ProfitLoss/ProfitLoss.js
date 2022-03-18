@@ -51,9 +51,17 @@ const ProfitLoss = (props) => {
         return '';
     }
 
+    const calcHodl = (lastTrade, startCrypto) => {
+      if (lastTrade?.wallet?.crypto?.bidPrice && startCrypto) {
+        return (lastTrade?.wallet?.crypto?.bidPrice * startCrypto).toFixed(2);
+      }
+      return '';
+    }
+
     if(start && current) {            
       const startStable = getStable(start);
       const startCrypto = getCrypto(start);
+      const cryptoSymbol = current.wallet?.crypto?.symbol;
   
       const currentEstimatedStable = getStable(current);
       const currentEstimatedCrypto = getCrypto(current);
@@ -65,6 +73,8 @@ const ProfitLoss = (props) => {
       const plCrypto = calcProfitLoss(startCrypto, currentEstimatedCrypto);
 
       const sinceLastTrade = calcSinceLastTrade(lastTrade, current);
+
+      const estimateHodl = calcHodl(lastTrade, startCrypto);
     
       setProfitLoss({
         startStable,
@@ -75,7 +85,9 @@ const ProfitLoss = (props) => {
         plCrypto,
         currentStable,
         currentCrypto,
-        sinceLastTrade
+        sinceLastTrade,
+        estimateHodl,
+        cryptoSymbol
       });
     }
   
@@ -87,46 +99,39 @@ const ProfitLoss = (props) => {
       <Table>
         <TableHead>
           <TableRow>
-            <StyledTableCell>Profit/Loss</StyledTableCell>
-            <StyledTableCell align="right">Start Stable</StyledTableCell>
-            <StyledTableCell align="right">Current Stable</StyledTableCell>
-            <StyledTableCell align="right">P/L</StyledTableCell>
-            <StyledTableCell align="right">Start Crypto</StyledTableCell>
-            <StyledTableCell align="right">Current Crypto</StyledTableCell>
+            <StyledTableCell>{'Start ' + start?.time?.split(' ')[0] + ' - ' + props.profitLoss.startStable + ' $'}</StyledTableCell>
+            <StyledTableCell align="right">Hodl</StyledTableCell>
+            <StyledTableCell align="right">Current Est.</StyledTableCell>
+            <StyledTableCell align="right">Wallet</StyledTableCell>
             <StyledTableCell align="right">P/L</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           <TableRow key={props.profitLoss.since}>
-            <StyledTableCell component="th" scope="row">{'Since ' + start?.time?.split(' ')[0]}</StyledTableCell>
-            <StyledTableCell align="right">{props.profitLoss.startStable}</StyledTableCell>
-            <StyledTableCell align="right">{props.profitLoss.currentEstimatedStable}</StyledTableCell>
+            <StyledTableCell component="th" scope="row">Stable</StyledTableCell>
+            <StyledTableCell align="right">{props.profitLoss.estimateHodl + ' $'}</StyledTableCell>
+            <StyledTableCell align="right">{props.profitLoss.currentEstimatedStable + ' $'}</StyledTableCell>
+            <StyledTableCell align="right">{props.profitLoss.currentStable + ' $'}</StyledTableCell>
             <StyledTableCell align="right">{props.profitLoss.plStable}</StyledTableCell>
-            <StyledTableCell align="right">{props.profitLoss.startCrypto}</StyledTableCell>
-            <StyledTableCell align="right">{props.profitLoss.currentEstimatedCrypto}</StyledTableCell>
+          </TableRow>
+          <TableRow key={props.profitLoss.name}>
+            <StyledTableCell component="th" scope="row">Crypto</StyledTableCell>
+            <StyledTableCell align="right">{props.profitLoss.startCrypto + ' ' + props.profitLoss.cryptoSymbol}</StyledTableCell>
+            <StyledTableCell align="right">{props.profitLoss.currentEstimatedCrypto + ' ' + props.profitLoss.cryptoSymbol}</StyledTableCell>
+            <StyledTableCell align="right">{props.profitLoss.currentCrypto + ' ' + props.profitLoss.cryptoSymbol}</StyledTableCell>
             <StyledTableCell align="right">{props.profitLoss.plCrypto}</StyledTableCell>
           </TableRow>
           <TableRow key={props.profitLoss.name}>
-            <StyledTableCell component="th" scope="row">Wallet</StyledTableCell>
-            <StyledTableCell align="right"></StyledTableCell>
-            <StyledTableCell align="right">{props.profitLoss.currentStable}</StyledTableCell>
-            <StyledTableCell align="right"></StyledTableCell>
-            <StyledTableCell align="right"></StyledTableCell>
-            <StyledTableCell align="right">{props.profitLoss.currentCrypto}</StyledTableCell>
-            <StyledTableCell align="right"></StyledTableCell>
-          </TableRow>
-          <TableRow key={props.profitLoss.name}>
-            <StyledTableCell component="th" scope="row">Since Last Trade</StyledTableCell>
-            <StyledTableCell align="right"></StyledTableCell>
-            <StyledTableCell align="right"></StyledTableCell>
+            <StyledTableCell component="th" scope="row">Last Trade</StyledTableCell>
             <StyledTableCell align="right"></StyledTableCell>
             <StyledTableCell align="right">{lastTrade?.strategy?.action + ' for ' + lastTrade?.wallet?.crypto?.askPrice}</StyledTableCell>
-            <StyledTableCell align="right">Current {current?.wallet?.crypto?.askPrice}</StyledTableCell>
-            <StyledTableCell align="right">{props.profitLoss.sinceLastTrade}</StyledTableCell>
+            <StyledTableCell align="right">Current price {current?.wallet?.crypto?.askPrice}</StyledTableCell>
+            <StyledTableCell align="right">∆ {props.profitLoss.sinceLastTrade}</StyledTableCell>
           </TableRow>
         </TableBody>
       </Table>
     </TableContainer>
+
   );
 }
 
