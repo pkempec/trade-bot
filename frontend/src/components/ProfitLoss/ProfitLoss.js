@@ -52,8 +52,8 @@ const ProfitLoss = (props) => {
     }
 
     const calcHodl = (current, startCrypto) => {
-      if (lastTrade?.wallet?.crypto?.bidPrice && startCrypto) {
-        return (lastTrade?.wallet?.crypto?.bidPrice * startCrypto).toFixed(2);
+      if (current?.wallet?.crypto?.bidPrice && startCrypto) {
+        return (current?.wallet?.crypto?.bidPrice * startCrypto).toFixed(2);
       }
       return '';
     }
