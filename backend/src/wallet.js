@@ -1,13 +1,24 @@
-let wallet = 'Loading check later.';
+const INDICATOR_TYPE = process.env.INDICATOR;
 
-const setWallet = (value) => {
-  wallet = value;
+let wallet = 'Loading check later.';
+let indicator = '';
+
+const setState = (walletValue, indicatorValue) => {
+  wallet = walletValue;
+  indicator = indicatorValue;
 }
-const getWallet = () => {
-  return wallet;
+
+const getState = () => {
+  return {
+    wallet,
+    indicator : {
+      value: indicator,
+      type: INDICATOR_TYPE
+    }
+  }
 }
 
 module.exports = {
-  setWallet,
-  getWallet,
+  setState,
+  getState,
 };

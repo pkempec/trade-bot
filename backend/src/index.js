@@ -4,7 +4,7 @@ const { analyze } = require('./analyzer');
 const { getStrategy } = require('./strategies/rsi-v4');
 const { trade, getWallet } = require('./binance');
 const { sendMessage, initCommunication } = require('./notification');
-const { setWallet } = require('./wallet');
+const { setState } = require('./wallet');
 const { logger, loadLastTrade } = require('./logger');
 
 var cron = require('node-cron');
@@ -25,7 +25,7 @@ cron.schedule('* * * * *', async () => {
 
     const indicatorValue = await analyze(INDICATOR_TYPE, TAAPI_CRYPTO, INTERVAL);
     const wallet = await getWallet(CRYPTO, STABLE);
-    setWallet(wallet);
+    setState(wallet, indicatorValue);
     const strategy = getStrategy(indicatorValue, wallet, lastTrade);
     trade(strategy, BINANCE_CRYPTO_SYMBOL);
 
