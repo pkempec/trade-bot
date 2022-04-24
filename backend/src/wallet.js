@@ -1,8 +1,8 @@
 const INDICATOR_TYPE = process.env.INDICATOR;
 const INTERVAL = process.env.INTERVAL;
 
-let wallet = 'Loading check later.';
-let indicator = '';
+let wallet;
+let indicator;
 
 const setState = (walletValue, indicatorValue) => {
   wallet = walletValue;
