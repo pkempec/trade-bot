@@ -7,6 +7,21 @@ Web app that displays statistics generaged by trade-bot.
 ! note all buy/sell must presents
 
 ## start
+
 ```
 yarn start
+```
+
+## Linux
+
+To Resolve 
+
+```
+FATAL ERROR: CALL_AND_RETRY_LAST Allocation failed - JavaScript heap out of memory error Command failed with exit code 1.
+```
+
+run 
+
+```
+export NODE_OPTIONS=--max-old-space-size=2048
 ```
