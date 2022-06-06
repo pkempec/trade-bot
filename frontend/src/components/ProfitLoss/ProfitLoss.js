@@ -1,22 +1,10 @@
 import React, { useEffect } from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { themeDark} from '../Theme/Theme';
-
-const StyledTableCell = withStyles((theme) => ({
-  head: {
-    borderColor: themeDark.palette.secondary.main,
-    textTransform: 'uppercase',
-  },
-  body: {
-    borderColor: themeDark.palette.secondary.main,
-  }
-}))(TableCell);
+import { StyledTableCell } from '../Theme/Theme';
 
 const ProfitLoss = (props) => {
 

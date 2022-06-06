@@ -1,0 +1,84 @@
+import React from "react";
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import { StyledTableCell } from '../Theme/Theme';
+
+const TradeStats = (props) => {
+
+  console.log(props.trades);
+
+  const getFirstBuy = (trades) => {
+    for (let trade of trades ) {
+      if (trade.strategy.action === 'BUY') {
+        return trade;
+      }
+    }
+  }
+
+  const calcTradeDelta = (trades) => {
+    let results = [];
+    let buy = getFirstBuy(trades).wallet.total.estimate;
+    let buyTime = getFirstBuy(trades).time;
+    let skip = true;
+
+    for(let trade of trades ) {
+      if(skip) {
+        if (trade.strategy.action !== 'BUY'){
+          continue;
+        }
+        skip = false;
+        continue;
+      }
+      if(trade.strategy.action === 'SELL') {
+        let sell = trade.wallet.total.estimate;
+        let sellTime = trade.time;
+        results.push({
+          buy: buy.toFixed(2),
+          buyTime: buyTime,
+          sell: sell.toFixed(2),
+          sellTime: sellTime,
+          diff: (sell - buy).toFixed(2),
+          perc: (((sell/buy) -1) * 100 ).toFixed(2)
+        })
+      } else {
+        buy = trade.wallet.total.estimate;
+        buyTime = trade.time;
+      }
+    }
+
+    return results;
+  };
+
+  const tradeDelta = calcTradeDelta(props.trades);
+
+  return (
+    <TableContainer>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <StyledTableCell>BUY</StyledTableCell>
+            <StyledTableCell>SELL</StyledTableCell>
+            <StyledTableCell align="right">∆</StyledTableCell>
+            <StyledTableCell align="right">%</StyledTableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {tradeDelta.map(trade => (
+          <TableRow key={trade.id}>
+            <StyledTableCell>{trade.buy + ' $ (' + trade.buyTime + ')'}</StyledTableCell>
+            <StyledTableCell>{trade.sell + ' $ (' + trade.sellTime + ')'}</StyledTableCell>
+            <StyledTableCell align="right">{trade.diff + ' $'}</StyledTableCell>
+            <StyledTableCell align="right">{trade.perc + ' %'}</StyledTableCell>
+          </TableRow>
+          )
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}
+
+export default TradeStats;

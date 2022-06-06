@@ -8,6 +8,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 
 import ProfitLoss from '../../components/ProfitLoss/ProfitLoss';
 import TradeChart from '../../components/TradeChart/TradeChart';
+import TradeStats from '../../components/TradeStats/TradeStats';
 import { loadFirstLog, loadHistoryByDay, loadJsonHistoryFilter, loadLastLog, loadLogMap, loadTrades, filter4hour, filter24hour} from '../../components/LogReader/LogReader';
 
 const TabPanel = (props) => {
@@ -133,6 +134,7 @@ const Dashboard = () => {
       </TabPanel>
       <TabPanel value={selectedTab} index={3}>
         <TradeChart data={trades} />
+        <TradeStats trades={trades}/>
       </TabPanel>
     </div>
     );

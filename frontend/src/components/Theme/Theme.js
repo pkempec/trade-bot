@@ -1,4 +1,6 @@
 import { createTheme } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
+import TableCell from '@material-ui/core/TableCell';
 
 const themeLight = createTheme({
   palette: {
@@ -31,7 +33,19 @@ const themeDark = createTheme({
   }
 });
 
+
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    borderColor: themeDark.palette.secondary.main,
+    textTransform: 'uppercase',
+  },
+  body: {
+    borderColor: themeDark.palette.secondary.main,
+  }
+}))(TableCell);
+
 export {
   themeDark,
-  themeLight
+  themeLight,
+  StyledTableCell
 }
