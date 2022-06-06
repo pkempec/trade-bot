@@ -8,7 +8,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 
 import ProfitLoss from '../../components/ProfitLoss/ProfitLoss';
 import TradeChart from '../../components/TradeChart/TradeChart';
-import { loadFirstLog, loadHistoryByDay, loadJsonHistoryFilter, loadLastLog, loadLogMap, loadTrades, filter30min, filter1hour, filter4hour} from '../../components/LogReader/LogReader';
+import { loadFirstLog, loadHistoryByDay, loadJsonHistoryFilter, loadLastLog, loadLogMap, loadTrades, filter4hour, filter24hour} from '../../components/LogReader/LogReader';
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
@@ -52,7 +52,7 @@ const Dashboard = () => {
   const [profitLoss, setProfitLoss] = useState(emptyProfitLoss);
   const [spinner, setSpinner] = useState(true);
 
-  const [filter, setFilter] = useState(() => () => filter1hour);
+  const [filter, setFilter] = useState(() => () => filter24hour);
 
   const [jsonData, setJsonData] = useState([]);
 
@@ -85,15 +85,11 @@ const Dashboard = () => {
     switch(newValue){
       case 1:
         setJsonData(empty)
-        setFilter(() => filter4hour);
+        setFilter(() => filter24hour);
         break;
       case 2:
         setJsonData(empty)
-        setFilter(() => filter1hour);
-        break;
-        case 3:
-        setJsonData(empty)
-        setFilter(() => filter30min);
+        setFilter(() => filter4hour);
         break;
       default:
         setJsonData(empty)
@@ -109,10 +105,9 @@ const Dashboard = () => {
       <AppBar position="static">
       <Tabs value={selectedTab} onChange={handleTabChange} aria-label="simple tabs example">
           <Tab label="Daily" id='0' />
-          <Tab label="4 hour" id='1' />
-          <Tab label="1 hour" id='2' />
-          <Tab label="30 min" id='3' />
-          <Tab label="Trades" id='4' />
+          <Tab label="24 hour" id='1' />
+          <Tab label="4 hour" id='2' />
+          <Tab label="Trades" id='3' />
         </Tabs>
       </AppBar>
       <TabPanel value={selectedTab} index={0}>
@@ -137,9 +132,6 @@ const Dashboard = () => {
         <TradeChart data={jsonData} />
       </TabPanel>
       <TabPanel value={selectedTab} index={3}>
-        <TradeChart data={jsonData} />
-      </TabPanel>
-      <TabPanel value={selectedTab} index={4}>
         <TradeChart data={trades} />
       </TabPanel>
     </div>

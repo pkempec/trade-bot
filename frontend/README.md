@@ -20,8 +20,8 @@ To Resolve
 FATAL ERROR: CALL_AND_RETRY_LAST Allocation failed - JavaScript heap out of memory error Command failed with exit code 1.
 ```
 
-run 
+add to /etc/environment
 
 ```
-export NODE_OPTIONS=--max-old-space-size=2048
+NODE_OPTIONS="--max-old-space-size=2048"
 ```

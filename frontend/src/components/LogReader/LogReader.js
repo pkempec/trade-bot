@@ -78,6 +78,10 @@ const filter4hour = (log) => {
   return (log?.time?.endsWith('00:00:00') || log?.time?.endsWith('04:00:00') ||  log?.time?.endsWith('08:00:00') ||  log?.time?.endsWith('12:00:00') ||  log?.time?.endsWith('16:00:00') ||  log?.time?.endsWith('20:00:00'));
 }
 
+const filter24hour = (log) => {
+  return log?.time?.endsWith('00:00:00');
+}
+
 
 const readLog = (log, setData) => {
   fetch(log)
@@ -98,4 +102,5 @@ export {
   filter30min,
   filter1hour,
   filter4hour,
+  filter24hour,
 }
