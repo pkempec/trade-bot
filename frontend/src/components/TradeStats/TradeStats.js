@@ -61,6 +61,8 @@ const TradeStats = (props) => {
           <TableRow>
             <StyledTableCell>BUY</StyledTableCell>
             <StyledTableCell>SELL</StyledTableCell>
+            <StyledTableCell>BUY Time</StyledTableCell>
+            <StyledTableCell>SELL Time</StyledTableCell>
             <StyledTableCell align="right">∆</StyledTableCell>
             <StyledTableCell align="right">%</StyledTableCell>
           </TableRow>
@@ -68,8 +70,10 @@ const TradeStats = (props) => {
         <TableBody>
           {tradeDelta.map(trade => (
           <TableRow key={trade.id}>
-            <StyledTableCell>{trade.buy + ' $ (' + trade.buyTime + ')'}</StyledTableCell>
-            <StyledTableCell>{trade.sell + ' $ (' + trade.sellTime + ')'}</StyledTableCell>
+            <StyledTableCell>{trade.buy}</StyledTableCell>
+            <StyledTableCell>{trade.sell}</StyledTableCell>
+            <StyledTableCell>{trade.buyTime}</StyledTableCell>
+            <StyledTableCell>{trade.sellTime}</StyledTableCell>
             <StyledTableCell align="right">{trade.diff + ' $'}</StyledTableCell>
             <StyledTableCell align="right">{trade.perc + ' %'}</StyledTableCell>
           </TableRow>
