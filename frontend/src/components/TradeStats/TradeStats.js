@@ -5,6 +5,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { StyledTableCell } from '../Theme/Theme';
+import moment from 'moment';
 
 const TradeStats = (props) => {
 
@@ -35,11 +36,14 @@ const TradeStats = (props) => {
       if(trade.strategy.action === 'SELL') {
         let sell = trade.wallet.total.estimate;
         let sellTime = trade.time;
+        let sellTimeM = moment(sellTime, 'YYYY.MM.DD HH:mm:ss');
+        let buyTimeM = moment(buyTime, 'YYYY.MM.DD HH:mm:ss');
         results.push({
           buy: buy.toFixed(2),
           buyTime: buyTime,
           sell: sell.toFixed(2),
           sellTime: sellTime,
+          diffTime: sellTimeM.diff(buyTimeM, "days") + ' d',
           diff: (sell - buy).toFixed(2),
           perc: (((sell/buy) -1) * 100 ).toFixed(2)
         })
@@ -63,7 +67,8 @@ const TradeStats = (props) => {
             <StyledTableCell>SELL</StyledTableCell>
             <StyledTableCell>BUY Time</StyledTableCell>
             <StyledTableCell>SELL Time</StyledTableCell>
-            <StyledTableCell align="right">∆</StyledTableCell>
+            <StyledTableCell align="right">∆ ⧖</StyledTableCell>
+            <StyledTableCell align="right">∆ $</StyledTableCell>
             <StyledTableCell align="right">%</StyledTableCell>
           </TableRow>
         </TableHead>
@@ -74,6 +79,7 @@ const TradeStats = (props) => {
             <StyledTableCell>{trade.sell}</StyledTableCell>
             <StyledTableCell>{trade.buyTime}</StyledTableCell>
             <StyledTableCell>{trade.sellTime}</StyledTableCell>
+            <StyledTableCell align="right">{trade.diffTime}</StyledTableCell>
             <StyledTableCell align="right">{trade.diff + ' $'}</StyledTableCell>
             <StyledTableCell align="right">{trade.perc + ' %'}</StyledTableCell>
           </TableRow>
