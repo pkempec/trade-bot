@@ -2,7 +2,7 @@ const { logger } = require('./logger');
 import moment from 'moment';
 import { loadLast14Hours } from "./storage";
 
-const last15ClosePrice = [];
+let last15ClosePrice = [];
 
 const calculate = async (currentPrice) => {
     try {
@@ -15,6 +15,7 @@ const calculate = async (currentPrice) => {
         }
 
         const time = moment().format('mm');
+        logger.info('Calc last price.');
         if(time === '00') {
             last15ClosePrice.shift();
         } else {
