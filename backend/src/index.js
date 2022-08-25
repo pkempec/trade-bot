@@ -35,7 +35,7 @@ cron.schedule('* * * * *', async () => {
     const indicator = {
         type: INDICATOR_TYPE + '/' + INTERVAL,
         value: (indicatorValue !== undefined ? indicatorValue.toFixed(2) : indicatorValue),
-        custom: rsiCalc
+        custom: rsiCalc.toFixed(2)
     }
 
     const data = {time, indicator, wallet, strategy}
