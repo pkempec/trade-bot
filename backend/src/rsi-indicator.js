@@ -6,16 +6,16 @@ const last15ClosePrice = [];
 
 const calculate = async (currentPrice) => {
     try {
-        if (last15ClosePrice.length < 14) {
+        if(last15ClosePrice.length < 14) {
             await loadClosePrices();
         }
-        if (last15ClosePrice.length < 14) {
-            logger.error('RSI', { error: 'Not enough data to calculate RSI' });
+        if(last15ClosePrice.length < 14) {
+            logger.error('RSI', { error: 'Not enough data to calculate RSI'});
             return -1;
         }
 
         const time = moment().format('mm');
-        if (time === '00') {
+        if(time === '00') {
             last15ClosePrice.shift();
         } else {
             last15ClosePrice.pop();
@@ -25,7 +25,8 @@ const calculate = async (currentPrice) => {
         const last14UpwardMovement = [];
         const last14DownwardMovement = [];
 
-        for (let i = 0; i < last15ClosePrice.length; i++) {
+        logger.info('Calc movement.');
+        for (let i = 0; i < last15ClosePrice.length - 1; i++) {
             const diff = last15ClosePrice[i + 1] - last15ClosePrice[i];
             if (diff > 0) {
                 last14UpwardMovement.push(diff);
@@ -39,9 +40,9 @@ const calculate = async (currentPrice) => {
         const avrgUp = getAverage(last14UpwardMovement);
         const avrgDown = getAverage(last14DownwardMovement);
 
-        logger.info('Calc rsi. ' + avrgUp + ' ' + avrgDown + last15ClosePrice[0]);
-        const rsi = 100 - (100 / (1 + avrgUp / avrgDown));
-        logger.info('Calc rsi after. ' + rsi);
+        logger.info('Calc rsi. '+ avrgUp + ' '+ avrgDown + last15ClosePrice[0]);
+        const rsi = 100 - (100 / ( 1 + avrgUp / avrgDown ));
+        logger.info('Calc rsi after. '+ rsi );
 
         return rsi;
     } catch (error) {
@@ -57,7 +58,7 @@ const loadClosePrices = async () => {
     logger.info('Loading data from db.');
     last15ClosePrice = [];
     const records = await loadLast14Hours();
-    records.reverse().forEach(record => {
+    records.reverse().forEach( record => {
         last15ClosePrice.push(record.w_crypto_ask);
     });
 }
