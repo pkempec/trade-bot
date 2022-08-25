@@ -8,9 +8,6 @@ import { StyledTableCell } from '../Theme/Theme';
 import moment from 'moment';
 
 const TradeStats = (props) => {
-
-  console.log(props.trades);
-
   const getFirstBuy = (trades) => {
     for (let trade of trades ) {
       if (trade.strategy.action === 'BUY') {
