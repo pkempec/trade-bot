@@ -26,7 +26,7 @@ const calculate = async (currentPrice) => {
         const last14DownwardMovement = [];
 
         logger.info('Calc movement.');
-        for (let i = 0; i < last15ClosePrice.length - 1; i++) {
+        for (let i = 0; i < last15ClosePrice.length- 1; i++) {
             const diff = last15ClosePrice[i + 1] - last15ClosePrice[i];
             if (diff > 0) {
                 last14UpwardMovement.push(diff);
@@ -58,7 +58,9 @@ const loadClosePrices = async () => {
     logger.info('Loading data from db.');
     last15ClosePrice = [];
     const records = await loadLast14Hours();
+    logger.info('Data has been loaded.');
     records.reverse().forEach( record => {
+        logger.info('iterate.');
         last15ClosePrice.push(record.w_crypto_ask);
     });
 }
