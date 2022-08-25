@@ -15,6 +15,9 @@
     "momentjs": "^2.0.0",
     "node-cron": "^2.0.3",
     "node-telegram-bot-api": "^0.54.0",
+    "pg": "^8.8.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.21.4",
     "taapi": "^1.2.8",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.5"

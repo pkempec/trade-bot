@@ -6,6 +6,7 @@ const { trade, getWallet } = require('./binance');
 const { sendMessage, initCommunication } = require('./notification');
 const { setState } = require('./wallet');
 const { logger, loadLastTrade } = require('./logger');
+const { store } = require('./storage');
 
 var cron = require('node-cron');
 
@@ -34,7 +35,9 @@ cron.schedule('* * * * *', async () => {
         value: (indicatorValue !== undefined ? indicatorValue.toFixed(2) : indicatorValue)
     }
 
-    logger.info('Stats', {time, indicator, wallet, strategy});
+    const data = {time, indicator, wallet, strategy}
+    logger.info('Stats', data);
+    await store(data);
 
     if (strategy.action != 'WAIT') {
         logger.log('trade', {time, indicator, wallet, strategy});
