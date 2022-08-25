@@ -6,16 +6,16 @@ const last15ClosePrice = [];
 
 const calculate = async (currentPrice) => {
     try {
-        if(last15ClosePrice.length < 14) {
+        if (last15ClosePrice.length < 14) {
             await loadClosePrices();
         }
-        if(last15ClosePrice.length < 14) {
-            logger.error('RSI', { error: 'Not enough data to calculate RSI'});
+        if (last15ClosePrice.length < 14) {
+            logger.error('RSI', { error: 'Not enough data to calculate RSI' });
             return -1;
         }
 
         const time = moment().format('mm');
-        if(time === '00') {
+        if (time === '00') {
             last15ClosePrice.shift();
         } else {
             last15ClosePrice.pop();
@@ -35,10 +35,14 @@ const calculate = async (currentPrice) => {
                 last14UpwardMovement.push(0);
             }
         }
+        logger.info('Calc avg.');
         const avrgUp = getAverage(last14UpwardMovement);
         const avrgDown = getAverage(last14DownwardMovement);
 
-        const rsi = 100 - (100 / ( 1 + avrgUp / avrgDown ));
+        logger.info('Calc rsi. ' + avrgUp + ' ' + avrgDown + last15ClosePrice[0]);
+        const rsi = 100 - (100 / (1 + avrgUp / avrgDown));
+        logger.info('Calc rsi after. ' + rsi);
+
         return rsi;
     } catch (error) {
         logger.error('Analyzer', { error });
@@ -50,8 +54,10 @@ const getAverage = (prices) => {
 }
 
 const loadClosePrices = async () => {
+    logger.info('Loading data from db.');
+    last15ClosePrice = [];
     const records = await loadLast14Hours();
-    records.reverse().forEach( record => {
+    records.reverse().forEach(record => {
         last15ClosePrice.push(record.w_crypto_ask);
     });
 }
