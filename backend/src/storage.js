@@ -32,6 +32,7 @@ const Record = sequelize.define('strategy_action', {
   strategy_amount: DataTypes.NUMBER,
   strategy_level: DataTypes.STRING,
   created_on: DataTypes.DATE,
+  indicator_value_custom: DataTypes.NUMBER,
 },
   {
     tableName: "strategy_action",
@@ -58,12 +59,25 @@ const store = async (data) => {
       strategy_amount: data.strategy.amount,
       strategy_level: data.strategy.level,
       created_on: moment(data.time, 'YYYY.MM.DD HH:mm:ss').toDate(),
+      indicator_value_custom: data.indicator.custom,
     });
   } catch (error) {
     logger.error('Storage', { error, reason: 'Unable to store data.', data: data});
   }
 }
 
+
+const loadLast14Hours = async () => {
+  return await sequelize.query('SELECT * FROM strategy_action WHERE EXTRACT (MINUTE FROM created_on) = 0 ORDER BY created_on DESC LIMIT 14', {
+    model: Record,
+    mapToModel: true
+  });
+}
+
+
+
+
 module.exports = {
   store: store,
+  loadLast14Hours: loadLast14Hours,
 };
