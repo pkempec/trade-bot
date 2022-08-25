@@ -7,7 +7,7 @@ const last15ClosePrice = [];
 const calculate = async (currentPrice) => {
     try {
         if(last15ClosePrice.length < 14) {
-            await loadClosePrices();
+            last15ClosePrice = await loadClosePrices();
         }
         if(last15ClosePrice.length < 14) {
             logger.error('RSI', { error: 'Not enough data to calculate RSI'});
@@ -56,13 +56,9 @@ const getAverage = (prices) => {
 
 const loadClosePrices = async () => {
     logger.info('Loading data from db.');
-    last15ClosePrice = [];
     const records = await loadLast14Hours();
     logger.info('Data has been loaded.');
-    records.reverse().forEach( record => {
-        logger.info('iterate.');
-        last15ClosePrice.push(record.w_crypto_ask);
-    });
+    return records.reverse().map(record => record.w_crypto_ask);
 }
 
 module.exports = {
