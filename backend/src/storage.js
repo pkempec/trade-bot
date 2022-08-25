@@ -30,8 +30,8 @@ const store = async (data) => {
   }
 }
 
-const loadLast14Hours = async () => {
-  return await sequelize.query('SELECT * FROM strategy_action WHERE EXTRACT (MINUTE FROM created_on) = 0 ORDER BY created_on DESC LIMIT 14', {
+const loadLast15Hours = async () => {
+  return await sequelize.query('SELECT * FROM strategy_action WHERE EXTRACT (MINUTE FROM created_on) = 0 ORDER BY created_on DESC LIMIT 15', {
     model: Record,
     mapToModel: true
   });
@@ -39,5 +39,5 @@ const loadLast14Hours = async () => {
 
 module.exports = {
   store: store,
-  loadLast14Hours: loadLast14Hours,
+  loadLast15Hours: loadLast15Hours,
 };
