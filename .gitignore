@@ -6,5 +6,5 @@ lib
 *.log
 trade.json
 
-backend/simulations
-backend/data
+trader/simulations
+trader/data

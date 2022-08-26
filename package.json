@@ -5,10 +5,11 @@
   "license": "MIT",
   "repository": "https://github.com/pkempec/trade-bot.git",
   "scripts": {
-    "install": "yarn --cwd backend install && yarn --cwd frontend install",
-    "start-backend": "yarn --cwd backend start",
-    "start-simulation": "yarn --cwd backend simulate",
-    "start-frontend": "yarn --cwd frontend start"
+    "install": "yarn --cwd trader install && yarn --cwd ui-frontend install && yarn --cwd ui-backend install",
+    "start-trader": "yarn --cwd trader start",
+    "start-simulation": "yarn --cwd trader simulate",
+    "start-ui-backend": "yarn --cwd ui-backend start",
+    "start-ui-frontend": "yarn --cwd ui-frontend start"
   },
   "dependencies": {}
 }

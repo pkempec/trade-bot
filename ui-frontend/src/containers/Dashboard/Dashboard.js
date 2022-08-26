@@ -5,11 +5,12 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import moment from 'moment';
 
 import ProfitLoss from '../../components/ProfitLoss/ProfitLoss';
 import TradeChart from '../../components/TradeChart/TradeChart';
 import TradeStats from '../../components/TradeStats/TradeStats';
-import { loadFirstLog, loadHistoryByDay, loadJsonHistoryFilter, loadLastLog, loadLogMap, loadTrades, filter4hour, filter24hour} from '../../components/LogReader/LogReader';
+import { loadFirstRecord, loadLastRecord, loadTrades, loadDays, loadDate, loadDaily } from '../../components/DataReader/DataReader';
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
@@ -34,7 +35,7 @@ const TabPanel = (props) => {
 const Dashboard = () => {
   const empty = [];
 
-  const emptyProfitLoss = [{ 
+  const emptyProfitLoss = [{
     name: 'wallet',
     startStable: 0,
     currentStable: 0,
@@ -45,36 +46,26 @@ const Dashboard = () => {
   }]
 
   const [trades, setTrades] = useState(empty);
-  const [log, setLog] = useState(empty);
-  const [logMap, setLogMap] = useState(new Map())
-  const [select, setSelect] = useState('');
+  const [current, setCurrent] = useState(empty);
+  const [selectDates, setSelectDates] = useState([moment().format('YYYY-MM-DD')]);
+  const [select, setSelect] = useState(moment().format('YYYY-MM-DD'));
   const [firstLog, setFirstLog] = useState();
   const [lastLog, setLastLog] = useState();
   const [profitLoss, setProfitLoss] = useState(emptyProfitLoss);
   const [spinner, setSpinner] = useState(true);
 
-  const [filter, setFilter] = useState(() => () => filter24hour);
-
-  const [jsonData, setJsonData] = useState([]);
 
   useEffect(() => {
+    loadFirstRecord(setFirstLog);
+    loadLastRecord(setLastLog);
     loadTrades(setTrades);
-    loadLogMap(setLogMap, setSelect);
+    loadDays(setSelectDates, setSelect);
   }, []);
 
   useEffect(() => {
-    loadFirstLog(logMap, setFirstLog);
-    loadLastLog(logMap, setLastLog);
-  }, [logMap]);
-
-  useEffect(() => {
     setSpinner(true);
-    loadJsonHistoryFilter(logMap, filter, setJsonData, setSpinner);
-  }, [logMap, filter])
-
-  useEffect(() => {
-    loadHistoryByDay(select, logMap, setLog);
-  }, [select, logMap]);
+    loadDate(select, setCurrent, setSpinner);
+  }, [select]);
 
   const handleDateSelection = (event) => {
     setSelect(event.target.value);
@@ -83,61 +74,55 @@ const Dashboard = () => {
   const [selectedTab, setSelectedTab] = React.useState(0);
 
   const handleTabChange = (event, newValue) => {
-    switch(newValue){
-      case 1:
-        setJsonData(empty)
-        setFilter(() => filter24hour);
+    switch (newValue) {
+      case 0:
+        loadDate(select, setCurrent, setSpinner);
         break;
-      case 2:
-        setJsonData(empty)
-        setFilter(() => filter4hour);
+      case 1:
+        setSpinner(true);
+        loadDaily(setCurrent, setSpinner)
         break;
       default:
-        setJsonData(empty)
         break;
     }
     setSelectedTab(newValue);
   };
 
-  return ( 
+  return (
     <div>
       <LinearProgress hidden={!spinner} />
-      <ProfitLoss first={firstLog} last={lastLog} lastTrade={trades[trades.length-1]} profitLoss={profitLoss} setProfitLoss={setProfitLoss} />
+      <ProfitLoss first={firstLog} last={lastLog} lastTrade={trades[trades.length - 1]} profitLoss={profitLoss} setProfitLoss={setProfitLoss} />
       <AppBar position="static">
-      <Tabs value={selectedTab} onChange={handleTabChange} aria-label="simple tabs example">
+        <Tabs value={selectedTab} onChange={handleTabChange} aria-label="simple tabs example">
           <Tab label="Daily" id='0' />
           <Tab label="24 hour" id='1' />
-          <Tab label="4 hour" id='2' />
-          <Tab label="Trades" id='3' />
+          <Tab label="Trades" id='2' />
         </Tabs>
       </AppBar>
       <TabPanel value={selectedTab} index={0}>
         <Select
-            labelId="date-label"
-            id="date-id"
-            value={select}
-            onChange={handleDateSelection}
+          labelId="date-label"
+          id="date-id"
+          value={select}
+          onChange={handleDateSelection}
         >
           {
-            [...logMap.keys()].map(key =>
-              <MenuItem value={key} key={key}>{key}</MenuItem>
+            selectDates.map(date =>
+              <MenuItem value={date} key={date}>{date}</MenuItem>
             )
           }
         </Select>
-        <TradeChart data={log} />
+        <TradeChart data={current} />
       </TabPanel>
       <TabPanel value={selectedTab} index={1}>
-        <TradeChart data={jsonData} />
+        <TradeChart data={current} />
       </TabPanel>
       <TabPanel value={selectedTab} index={2}>
-        <TradeChart data={jsonData} />
-      </TabPanel>
-      <TabPanel value={selectedTab} index={3}>
         <TradeChart data={trades} />
-        <TradeStats trades={trades}/>
+        <TradeStats trades={trades} />
       </TabPanel>
     </div>
-    );
+  );
 }
 
 export default Dashboard;

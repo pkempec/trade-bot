@@ -5,66 +5,67 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { StyledTableCell } from '../Theme/Theme';
+import moment from 'moment';
 
 const ProfitLoss = (props) => {
 
-  const start =  props.first ? props.first[0] : null;
-  const current = props.last ? props.last[props.last.length-1] : null;
+  const start = props.first;
+  const current = props.last;
   const setProfitLoss = props.setProfitLoss;
   const lastTrade = props.lastTrade;
 
   useEffect(() => {
 
     const getCrypto = (log) => {
-      return (log.wallet?.crypto?.value + log.wallet?.stable?.estimateCrypto).toFixed(2);
+      return (log.wallet?.crypto?.value + log.wallet?.stable?.estimateCrypto)?.toFixed(2);
     }
 
     const getStable = (log) => {
-      return (log.wallet?.stable?.value + log.wallet?.crypto?.estimateStable).toFixed(2);
+      return (log.wallet?.stable?.value + log.wallet?.crypto?.estimateStable)?.toFixed(2);
     }
 
     const calcProfitLoss = (start, current) => {
-      return (((current/start) - 1) * 100).toFixed(2) + ' %';
+      return (((current / start) - 1) * 100).toFixed(2) + ' %';
     }
 
     const calcSinceLastTrade = (lastTrade, current) => {
       if (current?.wallet?.crypto?.askPrice
         && lastTrade?.wallet?.crypto?.askPrice
         && lastTrade?.strategy?.action) {
-          if (lastTrade.strategy.action === 'BUY') {
-            return (current.wallet.crypto.askPrice - lastTrade.wallet.crypto.askPrice).toFixed(2);
-          }
-          return (lastTrade.wallet.crypto.askPrice - current.wallet.crypto.askPrice).toFixed(2);
+        if (lastTrade.strategy.action === 'BUY') {
+          return (current.wallet.crypto.askPrice - lastTrade.wallet.crypto.askPrice).toFixed(2);
         }
-        return '';
-    }
-
-    const calcHodl = (current, startCrypto) => {
-      if (current?.wallet?.crypto?.bidPrice && startCrypto) {
-        return (current?.wallet?.crypto?.bidPrice * startCrypto).toFixed(2);
+        return (lastTrade.wallet.crypto.askPrice - current.wallet.crypto.askPrice).toFixed(2);
       }
       return '';
     }
 
-    if(start && current) {            
+    const calcHodl = (current, startCrypto) => {
+      if (current?.wallet?.crypto?.bidPrice && startCrypto) {
+        return (current?.wallet?.crypto?.bidPrice * startCrypto)?.toFixed(2);
+      }
+      return '';
+    }
+
+    if (start && current) {
       const startStable = getStable(start);
       const startCrypto = getCrypto(start);
       const cryptoSymbol = current.wallet?.crypto?.symbol;
-  
+
       const currentEstimatedStable = getStable(current);
       const currentEstimatedCrypto = getCrypto(current);
       const estimateHodl = calcHodl(current, startCrypto);
-      
-      const currentStable = (current.wallet?.stable?.value).toFixed(2);
-      const currentCrypto = (current.wallet?.crypto?.value).toFixed(2);
-      
+
+      const currentStable = (current.wallet?.stable?.value)?.toFixed(2);
+      const currentCrypto = (current.wallet?.crypto?.value)?.toFixed(2);
+
       const plStable = calcProfitLoss(startStable, currentEstimatedStable);
       const plCrypto = calcProfitLoss(startCrypto, currentEstimatedCrypto);
       const plHodl = calcProfitLoss(estimateHodl, currentEstimatedStable);
 
       const sinceLastTrade = calcSinceLastTrade(lastTrade, current);
 
-    
+
       setProfitLoss({
         startStable,
         currentEstimatedStable,
@@ -80,16 +81,16 @@ const ProfitLoss = (props) => {
         plHodl
       });
     }
-  
+
   }, [start, current, setProfitLoss, lastTrade])
-  
+
 
   return (
     <TableContainer>
       <Table>
         <TableHead>
           <TableRow>
-            <StyledTableCell>Start {start?.time?.split(' ')[0] + ' (' + props.profitLoss.startStable + ' $)'}</StyledTableCell>
+            <StyledTableCell>Start {(start?.time ? moment(start.time).format('DD.MM.YYYY') : '') + ' (' + props.profitLoss.startStable + ' $)'}</StyledTableCell>
             <StyledTableCell align="right">Hodl</StyledTableCell>
             <StyledTableCell align="right">Current Est.</StyledTableCell>
             <StyledTableCell align="right">Wallet</StyledTableCell>

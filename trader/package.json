@@ -1,5 +1,5 @@
 {
-  "name": "trade-bot-backend",
+  "name": "trade-bot-trader",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
