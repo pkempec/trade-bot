@@ -35,8 +35,8 @@ const TradeStats = (props) => {
       if (trade.strategy.action === 'SELL') {
         let sell = trade.wallet.total.estimate;
         let sellTime = trade.time;
-        let sellTimeM = sellTime ? moment(sellTime, 'YYYY.MM.DD HH:mm:ss') : null;
-        let buyTimeM = buyTime ? moment(buyTime, 'YYYY.MM.DD HH:mm:ss') : null;
+        let sellTimeM = sellTime ? moment(sellTime) : null;
+        let buyTimeM = buyTime ? moment(buyTime) : null;
         results.push({
           id: uuidv4(),
           buy: buy.toFixed(2),
@@ -77,8 +77,8 @@ const TradeStats = (props) => {
             <TableRow key={trade.id}>
               <StyledTableCell>{trade.buy}</StyledTableCell>
               <StyledTableCell>{trade.sell}</StyledTableCell>
-              <StyledTableCell>{trade.buyTime}</StyledTableCell>
-              <StyledTableCell>{trade.sellTime}</StyledTableCell>
+              <StyledTableCell>{moment(trade.buyTime).format("YYYY.MM.DD HH:mm")}</StyledTableCell>
+              <StyledTableCell>{moment(trade.sellTime).format("YYYY.MM.DD HH:mm")}</StyledTableCell>
               <StyledTableCell align="right">{trade.diffTime}</StyledTableCell>
               <StyledTableCell align="right">{trade.diff + ' $'}</StyledTableCell>
               <StyledTableCell align="right">{trade.perc + ' %'}</StyledTableCell>
