@@ -12,7 +12,7 @@ const store = async (data) => {
       w_crypto_value: data.wallet.crypto.value,
       w_crypto_estimate_stable: data.wallet.crypto.estimateStable,
       w_crypto_ask: data.wallet.crypto.askPrice,
-      w_crypto_bid: data.wallet.crypto.askPrice,
+      w_crypto_bid: data.wallet.crypto.bidPrice,
       w_stable_symbol: data.wallet.stable.symbol,
       w_stable_value: data.wallet.stable.value,
       w_stable_estimate_crypto: data.wallet.stable.estimateCrypto,
