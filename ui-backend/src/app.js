@@ -6,7 +6,7 @@ import record from './routers/record';
 const port = 4000;
 const app = express();
 
-const originlist = ['http://localhost:3000', 'http://example.com'];
+const originlist = ['http://localhost:3000', 'http://botberry.local:3000'];
 
 const corsOptions = {
   origin: (origin, callback) => {

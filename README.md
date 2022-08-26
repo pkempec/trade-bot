@@ -125,6 +125,11 @@ Logs from backend are collected in different places
 2. Warning logs are collected in backend/warning.log
 3. Error logs are collected in backend/error.log
 
+## PM2 setup
+pm2 start yarn --name trade-bot-trader -- start --
+pm2 start yarn --name trade-bot-ui-backend -- start --
+pm2 start yarn --name trade-bot-ui-frontend -- start --
+pm2 save
 
 ## FAQ
 Q1. I am getting "Timestamp for this request was 1000ms ahead of the server's time.".
