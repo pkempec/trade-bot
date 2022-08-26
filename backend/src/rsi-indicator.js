@@ -1,31 +1,34 @@
 const { logger } = require('./logger');
 import moment from 'moment';
-import { loadLast15Hours } from "./storage";
+import { loadClosePrices } from "./storage";
 
 let last15ClosePrice = [];
 
 const calculate = async (currentPrice) => {
     try {
-        if(last15ClosePrice.length < 14) {
-            last15ClosePrice = await loadClosePrices();
-        }
-        if(last15ClosePrice.length < 14) {
-            logger.error('RSI', { error: 'Not enough data to calculate RSI'});
-            return -1;
+        if (last15ClosePrice.length < 15) {
+            const records = await loadClosePrices();
+            last15ClosePrice = records.reverse().map(record => record.w_crypto_ask);
+            last15ClosePrice.push(currentPrice);
+        } else {
+            const time = moment().format('mm');
+            if (time === '00') {
+                last15ClosePrice.shift();
+            } else {
+                last15ClosePrice.pop();
+            }
+            last15ClosePrice.push(currentPrice);
         }
 
-        const time = moment().format('mm');
-        if(time === '00') {
-            last15ClosePrice.shift();
-        } else {
-            last15ClosePrice.pop();
+        if (last15ClosePrice.length < 15) {
+            logger.error('RSI', { error: 'Not enough data to calculate RSI' });
+            return -1;
         }
-        last15ClosePrice.push(currentPrice);
 
         const last14UpwardMovement = [];
         const last14DownwardMovement = [];
 
-        for (let i = 0; i < last15ClosePrice.length- 1; i++) {
+        for (let i = 0; i < last15ClosePrice.length - 1; i++) {
             const diff = last15ClosePrice[i + 1] - last15ClosePrice[i];
             if (diff > 0) {
                 last14UpwardMovement.push(diff);
@@ -38,7 +41,7 @@ const calculate = async (currentPrice) => {
         const avrgUp = getAverage(last14UpwardMovement);
         const avrgDown = getAverage(last14DownwardMovement);
 
-        const rsi = 100 - (100 / ( 1 + avrgUp / avrgDown ));
+        const rsi = 100 - (100 / (1 + avrgUp / avrgDown));
         return rsi;
     } catch (error) {
         logger.error('Analyzer', { error });
@@ -48,11 +51,6 @@ const calculate = async (currentPrice) => {
 
 const getAverage = (prices) => {
     return prices.reduce((a, b) => a + b, 0) / prices.length;
-}
-
-const loadClosePrices = async () => {
-    const records = await loadLast15Hours();
-    return records.reverse().map(record => record.w_crypto_ask);
 }
 
 module.exports = {
