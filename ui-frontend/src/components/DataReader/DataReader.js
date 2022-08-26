@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const HOST = 'http://localhost:4000/'
+const HOST = process.env.REACT_APP_BACKEND_HOST;
 
 const loadFirstRecord = (setFirstTrade) => {
   axios({
