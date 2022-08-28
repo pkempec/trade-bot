@@ -1,24 +1,13 @@
 const { logger } = require('./logger');
-import moment from 'moment';
 import { loadClosePrices } from "./storage";
 
 let last15ClosePrice = [];
 
 const calculate = async (currentPrice) => {
     try {
-        if (last15ClosePrice.length < 15) {
-            const records = await loadClosePrices();
-            last15ClosePrice = records.map(record => record.w_crypto_ask);
-            last15ClosePrice.push(currentPrice);
-        } else {
-            const time = moment().format('mm');
-            if (time === '00') {
-                last15ClosePrice.shift();
-            } else {
-                last15ClosePrice.pop();
-            }
-            last15ClosePrice.push(currentPrice);
-        }
+        const records = await loadClosePrices();
+        last15ClosePrice = records.reverse().map(record => record.w_crypto_ask);
+        last15ClosePrice.push(currentPrice);
 
         if (last15ClosePrice.length < 15) {
             logger.error('RSI', { error: 'Not enough data to calculate RSI' });
@@ -33,14 +22,12 @@ const calculate = async (currentPrice) => {
             if (diff > 0) {
                 last14UpwardMovement.push(diff);
                 last14DownwardMovement.push(0);
-            } if (diff = 0) {
-                last14DownwardMovement.push(0);
-                last14UpwardMovement.push(0);
             } else {
-                last14DownwardMovement.push(Math.abs(diff));
                 last14UpwardMovement.push(0);
+                last14DownwardMovement.push(Math.abs(diff));
             }
         }
+
         const avrgUp = getAverage(last14UpwardMovement);
         const avrgDown = getAverage(last14DownwardMovement);
 
