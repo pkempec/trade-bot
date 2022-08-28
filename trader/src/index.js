@@ -7,7 +7,7 @@ const { sendMessage, initCommunication } = require('./notification');
 const { setState } = require('./wallet');
 const { logger, loadLastTrade } = require('./logger');
 const { store } = require('./storage');
-const { calculate } = require('./rsi-indicator');
+const { calculate } = require('./indicators/rsi-indicator');
 
 var cron = require('node-cron');
 

@@ -1,12 +1,10 @@
-const { logger } = require('./logger');
-import { loadClosePrices } from "./storage";
-
-let last15ClosePrice = [];
+const { logger } = require('../logger');
+import { loadClosePrices } from "../storage";
 
 const calculate = async (currentPrice) => {
     try {
         const records = await loadClosePrices();
-        last15ClosePrice = records.reverse().map(record => record.w_crypto_ask);
+        let last15ClosePrice = records.reverse().map(record => record.w_crypto_ask);
         last15ClosePrice.push(currentPrice);
 
         if (last15ClosePrice.length < 15) {
@@ -14,8 +12,8 @@ const calculate = async (currentPrice) => {
             return -1;
         }
 
-        const last14UpwardMovement = [];
-        const last14DownwardMovement = [];
+        let last14UpwardMovement = [];
+        let last14DownwardMovement = [];
 
         for (let i = 0; i < last15ClosePrice.length - 1; i++) {
             const diff = last15ClosePrice[i + 1] - last15ClosePrice[i];
