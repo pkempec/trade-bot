@@ -31,7 +31,7 @@ const store = async (data) => {
 }
 
 const loadClosePrices = async () => {
-  return await sequelize.query('SELECT * FROM strategy_action WHERE EXTRACT (MINUTE FROM created_on) = 0 ORDER BY created_on DESC LIMIT 14', {
+  return await sequelize.query('SELECT * FROM strategy_action WHERE EXTRACT (MINUTE FROM created_on) = 0 ORDER BY created_on DESC LIMIT 100', {
     model: Record,
     mapToModel: true
   });
