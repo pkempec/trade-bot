@@ -8,7 +8,7 @@ const calculate = async (currentPrice) => {
     try {
         if (last15ClosePrice.length < 15) {
             const records = await loadClosePrices();
-            last15ClosePrice = records.reverse().map(record => record.w_crypto_ask);
+            last15ClosePrice = records.map(record => record.w_crypto_ask);
             last15ClosePrice.push(currentPrice);
         } else {
             const time = moment().format('mm');
@@ -33,6 +33,9 @@ const calculate = async (currentPrice) => {
             if (diff > 0) {
                 last14UpwardMovement.push(diff);
                 last14DownwardMovement.push(0);
+            } if (diff = 0) {
+                last14DownwardMovement.push(0);
+                last14UpwardMovement.push(0);
             } else {
                 last14DownwardMovement.push(Math.abs(diff));
                 last14UpwardMovement.push(0);
