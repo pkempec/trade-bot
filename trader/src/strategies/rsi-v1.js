@@ -17,6 +17,10 @@ const getStrategy = (indicator, wallet) => {
         logger.warn('Strategy', { reason: 'I am not trading without BNB for cheaper fees.'});
         return { action: 'WAIT', amount: 0, level: 0 };
     }
+    if (indicator <= 0) {
+        logger.warn('Strategy', { reason: 'I am not trading - missing indicator value.'});
+        return { action: 'WAIT', amount: 0, level: 0 };
+    }
 
     const stablePerc = (wallet.stable.estimateCrypto / (wallet.stable.estimateCrypto + wallet.crypto.value)) * 100;
     const cryptoPerc = (100 - stablePerc);

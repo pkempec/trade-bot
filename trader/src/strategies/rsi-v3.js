@@ -15,6 +15,10 @@ const getStrategy = (indicator, wallet) => {
         logger.warn('Strategy', { reason: 'I am not trading without BNB for cheaper fees.'});
         return { action: 'WAIT', amount: 0, level: 0 };
     }
+    if (indicator <= 0) {
+        logger.warn('Strategy', { reason: 'I am not trading - missing indicator value.'});
+        return { action: 'WAIT', amount: 0, level: 0 };
+    }
 
     if (indicator > 75) {
         const invest = calculateInvestmentValue(wallet, 98, 'SELL');
