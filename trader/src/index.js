@@ -23,7 +23,6 @@ cron.schedule('* * * * *', async () => {
 
     const wallet = await getWallet(CRYPTO, STABLE);
     const rsi = await calculate(wallet.crypto.askPrice);
-    setState(wallet, rsi);
     const strategy = getStrategy(rsi, wallet, lastTrade);
     trade(strategy, BINANCE_CRYPTO_SYMBOL);
 
@@ -35,6 +34,7 @@ cron.schedule('* * * * *', async () => {
     const data = {time, indicator, wallet, strategy}
     // logger.info('Stats', data);
     await store(data);
+    setState(wallet, indicator);
 
     if (strategy.action != 'WAIT') {
         logger.log('trade', {time, indicator, wallet, strategy});

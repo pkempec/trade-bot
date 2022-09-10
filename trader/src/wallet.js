@@ -1,6 +1,3 @@
-const INDICATOR_TYPE = process.env.INDICATOR;
-const INTERVAL = process.env.INTERVAL;
-
 let wallet;
 let indicator;
 
@@ -12,10 +9,7 @@ const setState = (walletValue, indicatorValue) => {
 const getState = () => {
   return {
     wallet,
-    indicator : {
-      type: INDICATOR_TYPE + '/' + INTERVAL,
-      value: (indicator !== undefined ? indicator.toFixed(2) : indicator)
-    }
+    indicator
   }
 }
 
