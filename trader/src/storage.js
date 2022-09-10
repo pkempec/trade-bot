@@ -26,7 +26,8 @@ const store = async (data) => {
       indicator_value_custom: data.indicator.custom,
     });
   } catch (error) {
-    logger.error('Storage', { error, reason: 'Unable to store data.', data: data});
+    const time = moment().format('YYYY.MM.DD HH:mm:ss');
+    logger.error('Storage', { time, error, reason: 'Unable to store data.', data: data});
   }
 }
 

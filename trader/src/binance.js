@@ -1,3 +1,4 @@
+import moment from 'moment';
 const crypto = require('crypto');
 const axios = require('axios');
 const { logger } = require('./logger');
@@ -24,9 +25,9 @@ const trade = async (strategy, tradeSymbol) => {
         try {
             await axios({ method: 'post', url: url, headers: { 'X-MBX-APIKEY': API_KEY } });
         } catch (error) {
-            logger.error('Binance', { error, reason: error.response.data.msg});
+            const time = moment().format('YYYY.MM.DD HH:mm:ss');
+            logger.error('Binance', { time, error, reason: error.response.data.msg});
         }
-
     }
 }
 
@@ -67,7 +68,7 @@ const getWallet = async (cryptoCoin, stableCoin) => {
         const response = await axios({ method: 'get', url: url, headers: { 'X-MBX-APIKEY': API_KEY } });
         for (let coin of response.data.balances) {
             if (coin.asset === cryptoCoin) {
-                result.crypto.value = Number(coin.free);
+                result.crypto.value = Number(Number(coin.free).toFixed(6));
                 result.crypto.askPrice = Number(Number(price.askPrice).toFixed(2));
                 result.crypto.bidPrice = Number(Number(price.bidPrice).toFixed(2));
                 result.crypto.estimateStable = Number((Number(coin.free) * Number(price.bidPrice)).toFixed(2));
@@ -77,13 +78,14 @@ const getWallet = async (cryptoCoin, stableCoin) => {
                 result.stable.estimateCrypto = Number((Number(coin.free) / Number(price.askPrice)).toFixed(2));
             }
             if (coin.asset === 'BNB') {
-                result.fee.value = Number(coin.free);
+                result.fee.value = Number(Number(coin.free).toFixed(6));
             }
         }
-        result.total.estimate = result.stable.value + result.crypto.estimateStable;
+        result.total.estimate = Number(result.stable.value + result.crypto.estimateStable.toFixed(2));
         return result;
     } catch (error) {
-        logger.error('Binance', { error, reason: error.response.data.msg});
+        const time = moment().format('YYYY.MM.DD HH:mm:ss');
+        logger.error('Binance', { time, error, reason: error.response.data.msg});
     }
 }
 
@@ -99,7 +101,8 @@ const currentPrice = async (cryptoCoin, stableCoin) => {
             bidPrice: response.data.bidPrice
         };
     } catch (error) {
-        logger.error('Binance', { error, reason: error.response.data.msg});
+        const time = moment().format('YYYY.MM.DD HH:mm:ss');
+        logger.error('Binance', { time, error, reason: error.response.data.msg, response});
     }
 
 }
