@@ -81,7 +81,7 @@ const getWallet = async (cryptoCoin, stableCoin) => {
                 result.fee.value = Number(Number(coin.free).toFixed(6));
             }
         }
-        result.total.estimate = Number(result.stable.value + result.crypto.estimateStable.toFixed(2));
+        result.total.estimate = Number((result.stable.value + result.crypto.estimateStable).toFixed(2));
         return result;
     } catch (error) {
         const time = moment().format('YYYY.MM.DD HH:mm:ss');
