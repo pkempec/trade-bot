@@ -23,7 +23,6 @@ const store = async (data) => {
       strategy_amount: data.strategy.amount,
       strategy_level: data.strategy.level,
       created_on: moment(data.time, 'YYYY.MM.DD HH:mm:ss').toDate(),
-      indicator_value_custom: data.indicator.custom,
     });
   } catch (error) {
     const time = moment().format('YYYY.MM.DD HH:mm:ss');

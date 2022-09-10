@@ -1,6 +1,6 @@
 import moment from 'moment';
 const taapi = require("taapi");
-const { logger } = require('./logger');
+const { logger } = require('../logger');
 
 const apiKey = process.env.TAAPI_API_KEY;
 const client = taapi.client(apiKey);
