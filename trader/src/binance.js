@@ -1,5 +1,6 @@
+require('dotenv').config();
 import moment from 'moment';
-const crypto = require('crypto');
+import crypto from 'crypto';
 import axios from 'axios';
 import { logger } from './logger';
 
