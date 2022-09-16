@@ -1,7 +1,7 @@
 import moment from 'moment';
-const crypto = require('crypto');
-const axios = require('axios');
-const { logger } = require('./logger');
+import crypto from 'crypto';
+import axios from 'axios';
+import { logger } from './logger';
 
 const BASE_URL = 'https://api.binance.com';
 const ENDPOINT_ORDER = '/api/v3/order';
@@ -85,7 +85,7 @@ const getWallet = async (cryptoCoin, stableCoin) => {
         return result;
     } catch (error) {
         const time = moment().format('YYYY.MM.DD HH:mm:ss');
-        logger.error('Binance', { time, error, reason: error.response.data.msg});
+        logger.error('Binance', { time, error});
     }
 }
 
@@ -97,8 +97,8 @@ const currentPrice = async (cryptoCoin, stableCoin) => {
         const response = await axios({ method: 'get', url: url });
 
         return {
-            askPrice: response.data.askPrice,
-            bidPrice: response.data.bidPrice
+            askPrice: response?.data?.askPrice,
+            bidPrice: response?.data?.bidPrice
         };
     } catch (error) {
         const time = moment().format('YYYY.MM.DD HH:mm:ss');
@@ -107,7 +107,7 @@ const currentPrice = async (cryptoCoin, stableCoin) => {
 
 }
 
-module.exports = {
-    trade: trade,
-    getWallet: getWallet,
+export {
+    trade,
+    getWallet,
 };

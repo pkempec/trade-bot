@@ -27,7 +27,7 @@ const initCommunication = () => {
   });
 }
 
-module.exports = {
-  sendMessage: sendMessage,
-  initCommunication: initCommunication,
+export {
+  sendMessage,
+  initCommunication,
 };

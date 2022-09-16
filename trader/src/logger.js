@@ -5,7 +5,7 @@ const path = require('path');
 
 const { format } = winston;
 const { combine, printf, json } = format;
-const LOG_PATH = '../frontend/src/data/';
+const LOG_PATH = '.';
 const LOG_TRADES = 'trades.log';
 
 const customFormat = printf((msg) => {
@@ -50,14 +50,6 @@ if (process.env.NODE_ENV !== 'production') {
   }));
 }
 
-const loadLastTrade = () => {
-  const filePath = path.join(LOG_PATH, LOG_TRADES);
-  const text = fs.readFileSync(filePath).toString();
-  const json = JSON.parse('[' + text.trim().replace(/,$/,'') + ']');
-  return json[json.length - 1];
-}
-
-module.exports = {
-  logger: logger,
-  loadLastTrade: loadLastTrade,
+export {
+  logger,
 };

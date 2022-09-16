@@ -6,7 +6,7 @@
  BUY  50% of crypto when ( RSI is between 25 and 30 and crypto in wallet is less than 51% )
 */
 
-const { logger } = require('../logger');
+import { logger } from '../logger';
 
 const getStrategy = (indicator, wallet, lastTrade) => {
     if (wallet === undefined) {
@@ -72,6 +72,6 @@ const isInDesiredProfit = (current, previous, desiredProfit) => {
     return currentProfit >= desiredProfit;
 }
 
-module.exports = {
-    getStrategy: getStrategy,
+export {
+    getStrategy,
 };

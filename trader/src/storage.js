@@ -1,4 +1,3 @@
-require('dotenv').config();
 const { logger } = require('./logger');
 import moment from 'moment';
 import { sequelize, Record } from './data-access/sequelize';
@@ -37,7 +36,7 @@ const loadClosePrices = async () => {
   });
 }
 
-module.exports = {
-  store: store,
-  loadClosePrices: loadClosePrices,
+export {
+  store,
+  loadClosePrices,
 };

@@ -1,6 +1,6 @@
 import moment from 'moment';
-const taapi = require("taapi");
-const { logger } = require('../logger');
+import taapi from "taapi";
+import { logger } from './logger';
 
 const apiKey = process.env.TAAPI_API_KEY;
 const client = taapi.client(apiKey);
@@ -17,6 +17,6 @@ const analyze = async (type, symbol, interval) => {
     }
 }
 
-module.exports = {
-    analyze: analyze,
+export {
+    analyze,
 };

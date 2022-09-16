@@ -10,7 +10,6 @@ router.get('/first', async (_, res) => {
   res.json(first);
 });
 
-
 router.get('/last', async (_, res) => {
   const last = await findLast();
   res.json(last);
@@ -36,17 +35,5 @@ router.get('/dates', async (_, res) => {
   const trades = await findDates();
   res.json(trades);
 });
-
-// Get single users
-// router.get('/', validator.query(queryIdSchema), async (req, res) => {
-//   const { id } = req.query;
-//   const user = await findById(id);
-//   if (user) {
-//     return res.json(user);
-//   }
-//   return res
-//     .status(404)
-//     .send('User not found.');
-// });
 
 export default router;

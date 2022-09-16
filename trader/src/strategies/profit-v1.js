@@ -5,7 +5,7 @@
  MIGHT GET STUCK - when coin never reach its tops/lows
 */
 
-const { logger } = require('../logger');
+import { logger } from '../logger';
 
 const getStrategy = (indicator, wallet, lastTrade) => {
     if (wallet === undefined) {
@@ -59,6 +59,6 @@ const isInDesiredProfit = (current, previous, desiredProfit) => {
     return currentProfit >= desiredProfit;
 }
 
-module.exports = {
-    getStrategy: getStrategy,
+export {
+    getStrategy,
 };

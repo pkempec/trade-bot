@@ -1,4 +1,4 @@
-const { logger } = require('../logger');
+import { logger } from '../logger';
 import { loadClosePrices } from "../storage";
 
 const calculate = async (currentPrice) => {
@@ -41,6 +41,6 @@ const getAverage = (prices) => {
     return prices.reduce((a, b) => a + b, 0) / prices.length;
 }
 
-module.exports = {
-    calculate: calculate,
+export {
+    calculate,
 };

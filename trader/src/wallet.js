@@ -13,7 +13,7 @@ const getState = () => {
   }
 }
 
-module.exports = {
+export {
   setState,
   getState,
 };

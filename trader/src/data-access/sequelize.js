@@ -37,7 +37,7 @@ const Record = sequelize.define('strategy_action', {
     timestamps: false,
   });
 
-module.exports = {
+export {
   sequelize,
   Record,
 };

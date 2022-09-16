@@ -4,7 +4,7 @@
  BUY 98% of crypto when RSI reach value lower than 30
 */
 
-const { logger } = require('../logger');
+import { logger } from '../logger';
 
 const getStrategy = (indicator, wallet) => {
     if (wallet === undefined) {
@@ -45,6 +45,6 @@ const calculateInvestmentValue = (wallet, perc, action) => {
     return Number(invest.toFixed(2));
 }
 
-module.exports = {
-    getStrategy: getStrategy,
+export {
+    getStrategy,
 };
