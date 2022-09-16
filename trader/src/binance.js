@@ -1,5 +1,5 @@
 import moment from 'moment';
-import crypto from 'crypto';
+const crypto = require('crypto');
 import axios from 'axios';
 import { logger } from './logger';
 
