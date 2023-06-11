@@ -24,6 +24,7 @@ const initCommunication = () => {
       + '\nEst. crypto: ' + estCrypto 
       + '\nEst. stable: ' + estStable
       + '\n' + state.indicator.type + ": " + state.indicator.value;
+      + '\nState: ' + getConfig().state;
     }
     bot.sendMessage(TELEGRAM_CHAT_ID, message);
   });
