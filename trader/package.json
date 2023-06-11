@@ -26,6 +26,7 @@
     "@babel/cli": "^7.16.0",
     "@babel/core": "^7.16.0",
     "@babel/node": "^7.16.0",
+    "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": "^7.22.5",
     "@babel/plugin-transform-runtime": "^7.16.4",
     "@babel/preset-env": "^7.16.4",
     "nodemon": "^2.0.15"

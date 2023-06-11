@@ -1,6 +1,6 @@
 const { logger } = require('./logger');
 import moment from 'moment';
-import { sequelize, Record } from './data-access/sequelize';
+import { sequelize, Record, Config } from './data-access/sequelize';
 
 const store = async (data) => {
   try {
@@ -25,7 +25,7 @@ const store = async (data) => {
     });
   } catch (error) {
     const time = moment().format('YYYY.MM.DD HH:mm:ss');
-    logger.error('Storage', { time, error, reason: 'Unable to store data.', data: data});
+    logger.error('Storage', { time, error, reason: 'Unable to store data.', data: data });
   }
 }
 
@@ -36,7 +36,28 @@ const loadClosePrices = async () => {
   });
 }
 
+const loadConfig = async () => {
+  return await sequelize.query('SELECT * FROM config ORDER BY created_on DESC LIMIT 1', {
+    model: Config,
+    mapToModel: true
+  });
+}
+
+const storeConfigState = async (state) => {
+  try {
+    await Config.create({
+      state: state,
+      created_on: moment(data.time, 'YYYY.MM.DD HH:mm:ss').toDate(),
+    });
+  } catch (error) {
+    const time = moment().format('YYYY.MM.DD HH:mm:ss');
+    logger.error('Storage Config', { time, error, reason: 'Unable to store data.', state: state });
+  }
+}
+
 export {
   store,
   loadClosePrices,
+  loadConfig,
+  storeConfigState,
 };

@@ -6,6 +6,7 @@ import { sendMessage, initCommunication } from './notification';
 import { setState } from './wallet';
 import { logger } from './logger';
 import { store } from './storage';
+import { initConfig, getConfig } from './config';
 import { calculate } from './indicators/rsi-indicator-ewm';
 import * as cron from 'node-cron';
 
@@ -14,6 +15,7 @@ const STABLE = process.env.STABLE;
 
 const BINANCE_CRYPTO_SYMBOL = CRYPTO + STABLE;
 
+initConfig();
 initCommunication();
 
 cron.schedule('* * * * *', async () => {
@@ -23,8 +25,9 @@ cron.schedule('* * * * *', async () => {
     if (wallet) {
         const rsi = await calculate(wallet.crypto.askPrice);
         const strategy = getStrategy(rsi, wallet);
-        trade(strategy, BINANCE_CRYPTO_SYMBOL);
-
+        if (getConfig().state == 'trade') {
+            trade(strategy, BINANCE_CRYPTO_SYMBOL);
+        }
         const indicator = {
             type: 'rsi/1h-ewm',
             value: rsi?.toFixed(2)
@@ -35,7 +38,7 @@ cron.schedule('* * * * *', async () => {
         await store(data);
         setState(wallet, indicator);
 
-        if (strategy.action != 'WAIT') {
+        if (strategy.action != 'WAIT' && getConfig().state == 'trade') {
             logger.log('trade', { time, indicator, wallet, strategy });
             const estCrypto = (wallet.crypto.value + wallet.stable.estimateCrypto).toFixed(2);
             const estStable = (wallet.crypto.estimateStable + wallet.stable.value).toFixed(2);

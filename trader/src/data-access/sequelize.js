@@ -37,7 +37,17 @@ const Record = sequelize.define('strategy_action', {
     timestamps: false,
   });
 
+const Config = sequelize.define('config', {
+    state: DataTypes.STRING,
+    created_on: DataTypes.DATE,
+  },
+    {
+      tableName: "config",
+      timestamps: false,
+    });
+
 export {
   sequelize,
   Record,
+  Config,
 };

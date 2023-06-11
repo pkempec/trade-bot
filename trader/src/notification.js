@@ -1,6 +1,7 @@
 require('dotenv').config();
 const TelegramBot = require('node-telegram-bot-api');
 const { getState } = require('./wallet');
+const { setConfigState, getConfig } = require('./config');
 
 const { TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID } = process.env;
 const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: true });
@@ -25,6 +26,20 @@ const initCommunication = () => {
       + '\n' + state.indicator.type + ": " + state.indicator.value;
     }
     bot.sendMessage(TELEGRAM_CHAT_ID, message);
+  });
+  bot.onText(/\/pause/, () => {
+    setConfigState('paused');
+    bot.sendMessage(TELEGRAM_CHAT_ID, 'Setting paused state.');
+  });
+  bot.onText(/\/trade/, () => {
+    setConfigState('trade');
+    bot.sendMessage(TELEGRAM_CHAT_ID, 'Setting trade state.');
+  });
+  bot.onText(/\/state/, () => {
+    bot.sendMessage(TELEGRAM_CHAT_ID, 'Current state: ' + getConfig().state);
+  });
+  bot.onText(/\/help/, () => {
+    bot.sendMessage(TELEGRAM_CHAT_ID, 'Commands: /pause, /trade, /state, /status');
   });
 }
 
